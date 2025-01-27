@@ -2,3 +2,6 @@
 build
 .cache
 .clangd
+
+html
+latex
