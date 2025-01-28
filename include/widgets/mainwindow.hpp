@@ -3,21 +3,20 @@
 
 #include <QMainWindow>
 
-#include "ui_mainwindow.h"
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
 
-class main_window : public QMainWindow {
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    main_window(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
 
 private:
-    // std::unique_ptr<Ui::MainWindow> m_ui;
+    Ui::MainWindow *ui;
 };
 #endif    // MAINWINDOW_H
