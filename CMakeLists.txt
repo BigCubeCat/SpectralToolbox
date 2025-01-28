@@ -7,7 +7,10 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
+find_package(spdlog REQUIRED)
+
 add_subdirectory(lib/common)
+add_subdirectory(lib/io)
 
 # Создание исполняемого файла
 add_executable(${PROJECT_NAME}
@@ -15,7 +18,7 @@ add_executable(${PROJECT_NAME}
 )
 
 # Линковка со статической библиотекой
-target_link_libraries(${PROJECT_NAME} PRIVATE common_lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE common_lib io_lib)
 
 
 # подключение тестов

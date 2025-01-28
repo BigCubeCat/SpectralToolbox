@@ -12,5 +12,5 @@ add_executable(${PROJECT_NAME} ${TEST_SOURCES})
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC common_lib gtest)
+target_link_libraries(${PROJECT_NAME} PUBLIC io_lib common_lib gtest)
 
