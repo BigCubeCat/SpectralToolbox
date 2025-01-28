@@ -38,5 +38,5 @@ public:
     /// возращает вектор с трассой
     float_trace trace(int index) override;
     /// возращает traceheader
-    std::vector<int32_t> traceheader(int index) override;
+    std::vector<char> traceheader(int index) override;
 };

@@ -1,7 +1,6 @@
 #pragma once
 
 
-#include <cstdint>
 #include <vector>
 
 #include "trace.hpp"
@@ -21,5 +20,5 @@ public:
     /// возращает вектор с трассой
     virtual float_trace trace(int index) = 0;
     /// возращает traceheader
-    virtual std::vector<int32_t> traceheader(int index) = 0;
+    virtual std::vector<char> traceheader(int index) = 0;
 };

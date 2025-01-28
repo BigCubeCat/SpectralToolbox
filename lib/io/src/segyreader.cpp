@@ -53,9 +53,7 @@ float_trace segy_reader::trace(int index) {
     return trace;
 }
 
-std::vector<int32_t> segy_reader::traceheader(int index) {
-    std::vector<int32_t> result;
-    result.resize(SEGY_TRACE_HEADER_SIZE / sizeof(int32_t));
+std::vector<char> segy_reader::traceheader(int index) {
     std::vector<char> data(SEGY_TRACE_HEADER_SIZE);
     auto status = segy_traceheader(
         m_segy_file_ptr, index, data.data(), m_trace0, m_bsize
@@ -65,8 +63,7 @@ std::vector<int32_t> segy_reader::traceheader(int index) {
             "cant read traceheader: traceno={}" + std::to_string(index)
         );
     }
-    result.assign(data.data());
-    return result;
+    return data;
 }
 
 segy_reader::~segy_reader() {
