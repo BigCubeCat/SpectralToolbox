@@ -11,6 +11,7 @@ find_package(spdlog REQUIRED)
 
 add_subdirectory(lib/common)
 add_subdirectory(lib/io)
+add_subdirectory(lib/model)
 
 project(${PROJECT_NAME} LANGUAGES CXX)
 
@@ -30,6 +31,7 @@ target_link_libraries(${PROJECT_NAME}
 PUBLIC
   common_lib
   io_lib
+  model_lib
 PRIVATE
   Qt::Core
   Qt::Widgets
