@@ -11,6 +11,7 @@ find_package(spdlog REQUIRED)
 
 add_subdirectory(lib/common)
 add_subdirectory(lib/io)
+add_subdirectory(lib/emd)
 
 # Создание исполняемого файла
 add_executable(${PROJECT_NAME}

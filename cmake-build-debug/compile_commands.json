@@ -1,0 +1,56 @@
+[
+{
+  "directory": "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug",
+  "command": "/usr/bin/g++ -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/io/include -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles/SpectralToolbox.dir/src/main.cpp.o -c /home/anton/Documents/geohack/SpectralToolbox/src/main.cpp",
+  "file": "/home/anton/Documents/geohack/SpectralToolbox/src/main.cpp",
+  "output": "CMakeFiles/SpectralToolbox.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug",
+  "command": "/usr/bin/g++ -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -g -std=gnu++20 -fdiagnostics-color=always -o lib/common/CMakeFiles/common_lib.dir/src/main.cpp.o -c /home/anton/Documents/geohack/SpectralToolbox/lib/common/src/main.cpp",
+  "file": "/home/anton/Documents/geohack/SpectralToolbox/lib/common/src/main.cpp",
+  "output": "lib/common/CMakeFiles/common_lib.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug",
+  "command": "/usr/bin/g++ -DFMT_SHARED -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -DSPDLOG_SHARED_LIB -I/home/anton/Documents/geohack/SpectralToolbox/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -isystem /usr/include/eigen3 -g -std=gnu++20 -fdiagnostics-color=always -o lib/io/CMakeFiles/io_lib.dir/src/segyreader.cpp.o -c /home/anton/Documents/geohack/SpectralToolbox/lib/io/src/segyreader.cpp",
+  "file": "/home/anton/Documents/geohack/SpectralToolbox/lib/io/src/segyreader.cpp",
+  "output": "lib/io/CMakeFiles/io_lib.dir/src/segyreader.cpp.o"
+},
+{
+  "directory": "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug",
+  "command": "/usr/bin/g++ -DFMT_SHARED -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -DSPDLOG_SHARED_LIB -I/home/anton/Documents/geohack/SpectralToolbox/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -isystem /usr/include/eigen3 -g -std=gnu++20 -fdiagnostics-color=always -fopenmp -o lib/emd/CMakeFiles/emd_lib.dir/src/decomposer.cpp.o -c /home/anton/Documents/geohack/SpectralToolbox/lib/emd/src/decomposer.cpp",
+  "file": "/home/anton/Documents/geohack/SpectralToolbox/lib/emd/src/decomposer.cpp",
+  "output": "lib/emd/CMakeFiles/emd_lib.dir/src/decomposer.cpp.o"
+},
+{
+  "directory": "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug",
+  "command": "/usr/bin/g++ -DFMT_SHARED -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -DSPDLOG_SHARED_LIB -I/home/anton/Documents/geohack/SpectralToolbox/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -isystem /usr/include/eigen3 -g -std=gnu++20 -fdiagnostics-color=always -fopenmp -o lib/emd/CMakeFiles/emd_lib.dir/src/extremum_searcher.cpp.o -c /home/anton/Documents/geohack/SpectralToolbox/lib/emd/src/extremum_searcher.cpp",
+  "file": "/home/anton/Documents/geohack/SpectralToolbox/lib/emd/src/extremum_searcher.cpp",
+  "output": "lib/emd/CMakeFiles/emd_lib.dir/src/extremum_searcher.cpp.o"
+},
+{
+  "directory": "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug",
+  "command": "/usr/bin/g++ -DFMT_SHARED -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -DSPDLOG_SHARED_LIB -I/home/anton/Documents/geohack/SpectralToolbox/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -isystem /usr/include/eigen3 -g -std=gnu++20 -fdiagnostics-color=always -fopenmp -o lib/emd/CMakeFiles/emd_lib.dir/src/spline.cpp.o -c /home/anton/Documents/geohack/SpectralToolbox/lib/emd/src/spline.cpp",
+  "file": "/home/anton/Documents/geohack/SpectralToolbox/lib/emd/src/spline.cpp",
+  "output": "lib/emd/CMakeFiles/emd_lib.dir/src/spline.cpp.o"
+},
+{
+  "directory": "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug",
+  "command": "/usr/bin/g++ -I/home/anton/Documents/geohack/SpectralToolbox/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -g -O3 -Wall -fprofile-arcs -ftest-coverage -g -std=gnu++20 -fdiagnostics-color=always -o test/CMakeFiles/test_spectral_toolbox.dir/test_example.cpp.o -c /home/anton/Documents/geohack/SpectralToolbox/test/test_example.cpp",
+  "file": "/home/anton/Documents/geohack/SpectralToolbox/test/test_example.cpp",
+  "output": "test/CMakeFiles/test_spectral_toolbox.dir/test_example.cpp.o"
+},
+{
+  "directory": "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug",
+  "command": "/usr/bin/g++ -I/home/anton/Documents/geohack/SpectralToolbox/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -g -O3 -Wall -fprofile-arcs -ftest-coverage -g -std=gnu++20 -fdiagnostics-color=always -o test/CMakeFiles/test_spectral_toolbox.dir/test_io.cpp.o -c /home/anton/Documents/geohack/SpectralToolbox/test/test_io.cpp",
+  "file": "/home/anton/Documents/geohack/SpectralToolbox/test/test_io.cpp",
+  "output": "test/CMakeFiles/test_spectral_toolbox.dir/test_io.cpp.o"
+},
+{
+  "directory": "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug",
+  "command": "/usr/bin/g++ -I/home/anton/Documents/geohack/SpectralToolbox/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -g -O3 -Wall -fprofile-arcs -ftest-coverage -g -std=gnu++20 -fdiagnostics-color=always -o test/CMakeFiles/test_spectral_toolbox.dir/test_main.cpp.o -c /home/anton/Documents/geohack/SpectralToolbox/test/test_main.cpp",
+  "file": "/home/anton/Documents/geohack/SpectralToolbox/test/test_main.cpp",
+  "output": "test/CMakeFiles/test_spectral_toolbox.dir/test_main.cpp.o"
+}
+]
