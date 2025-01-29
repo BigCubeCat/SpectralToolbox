@@ -19,6 +19,9 @@ main_window::main_window(QWidget *parent)
         this,
         &main_window::open_segy_file
     );
+
+    m_file_widget = std::make_shared<file_widget>(this);
+    m_ui->mainLayout->addWidget(m_file_widget.get());
 }
 
 main_window::~main_window() {

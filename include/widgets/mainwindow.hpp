@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+#include "file_widget.hpp"
 #include "procedure_config_widget.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -30,6 +31,7 @@ public:
 private:
     Ui::MainWindow *m_ui;
     std::shared_ptr<procedure_config_widget> m_param_widget;
+    std::shared_ptr<file_widget> m_file_widget;
 
 public slots:
     void open_segy_file();
