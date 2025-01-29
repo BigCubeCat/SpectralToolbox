@@ -1,6 +1,5 @@
 #pragma once
 
-#include <atomic>
 #include <memory>
 
 #include "proc_config_iface.hpp"
@@ -14,18 +13,24 @@
 class datamodel {
 private:
     /// число от 0 до 100, прогресс в процентах
-    std::atomic<int> m_progress;
+    int m_progress = 0;
+    std::mutex m_reader_mutex;
     std::shared_ptr<reader_iface> m_data_reader;
     std::shared_ptr<proc_config_iface> m_config;
 
-    datamodel() {
-        m_progress.store(0);
-    }
+    datamodel() = default;
 
 public:
-    datamodel &instance();
+    static datamodel *instance() {
+        static datamodel inst;
+        return &inst;
+    }
 
     proc_config_iface *get_params();
+
+    bool file_loaded() {
+        return m_data_reader != nullptr;
+    }
 
     /// открыть новый файл с данными
     void open_file(const std::string &filename);

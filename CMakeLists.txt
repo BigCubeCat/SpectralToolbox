@@ -23,12 +23,16 @@ qt_add_executable(${PROJECT_NAME}
     WIN32 MACOSX_BUNDLE
     src/main.cpp
     src/widgets/mainwindow.cpp
+    src/widgets/procedure_config_widget.cpp
     include/widgets/mainwindow.hpp
+    include/widgets/procedure_config_widget.hpp
     src/widgets/mainwindow.ui
 )
 
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
+    spdlog
+
   common_lib
   io_lib
   model_lib
