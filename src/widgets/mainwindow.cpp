@@ -22,6 +22,13 @@ main_window::main_window(QWidget *parent)
 
     m_file_widget = std::make_shared<file_widget>(this);
     m_ui->mainLayout->addWidget(m_file_widget.get());
+
+    connect(
+        this,
+        &main_window::data_loaded,
+        m_file_widget.get(),
+        &file_widget::refresh
+    );
 }
 
 main_window::~main_window() {
@@ -35,6 +42,7 @@ void main_window::open_segy_file() {
 
     if (!file_name.isEmpty()) {
         datamodel::instance()->open_file(file_name.toStdString());
+        emit data_loaded();
     }
     else {
         spdlog::error("filename is isEmpty");

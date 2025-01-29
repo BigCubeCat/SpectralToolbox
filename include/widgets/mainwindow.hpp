@@ -33,6 +33,10 @@ private:
     std::shared_ptr<procedure_config_widget> m_param_widget;
     std::shared_ptr<file_widget> m_file_widget;
 
+signals:
+    void data_loaded();
+
+
 public slots:
     void open_segy_file();
 };

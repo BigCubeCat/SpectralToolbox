@@ -18,3 +18,12 @@ void datamodel::open_file(const std::string &filename) {
     m_data_reader = std::make_shared<segy_reader>(filename);
     m_reader_mutex.unlock();
 }
+
+reader_iface *datamodel::reader() {
+    m_reader_mutex.lock();
+    return m_data_reader.get();
+}
+
+void datamodel::unlock_reader() {
+    m_reader_mutex.unlock();
+}

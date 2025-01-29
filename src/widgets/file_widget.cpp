@@ -1,11 +1,8 @@
 #include "../../include/widgets/file_widget.hpp"
 
-#include "datamodel.hpp"
-
 
 file_widget::file_widget(QWidget *parent)
     : QWidget(parent),
-      m_no_data_label(new QLabel(this)),
       m_layout(new QVBoxLayout(this)),
       m_trace_choose_widget(new QVBoxLayout(this)),
       m_footer_widget(new QHBoxLayout(this)),
@@ -13,13 +10,14 @@ file_widget::file_widget(QWidget *parent)
       m_spin_box(new QSpinBox(this)),
       m_spacer(new QWidget(this)),
       m_wdt(new QWidget(this)),
-      m_wgt(new QWidget(this)) {
-    m_no_data_label->setText("Загрузите файл с данными");
+      m_wgt(new QWidget(this)),
+      m_data(new tracedata(this)) {
 
     this->setLayout(m_layout);
+    m_layout->addWidget(m_data);
+    m_layout->addWidget(m_wgt);
 
     setup_ui();
-    refresh();
 }
 
 void file_widget::setup_ui() {
@@ -38,12 +36,5 @@ void file_widget::setup_ui() {
 void file_widget::set_traceno(int traceno) { }
 
 void file_widget::refresh() {
-    auto *data = datamodel::instance();
-    if (!data->file_loaded()) {
-        m_layout->addWidget(m_no_data_label);
-    }
-    else {
-        m_layout->addWidget(m_data);
-    }
-    m_layout->addWidget(m_wgt);
+    m_data->update_image();
 }

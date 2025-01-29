@@ -18,7 +18,6 @@ class file_widget : public QWidget {
 private:
     int m_current_trace = 0;
 
-    QLabel *m_no_data_label;
     QVBoxLayout *m_layout;
 
     QHBoxLayout *m_footer_widget;
@@ -40,6 +39,7 @@ public:
 private slots:
     void set_traceno(int traceno);
 
+public slots:
     void refresh();
 };
 

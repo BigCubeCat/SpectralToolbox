@@ -34,4 +34,8 @@ public:
 
     /// открыть новый файл с данными
     void open_file(const std::string &filename);
+
+    reader_iface *reader();
+
+    void unlock_reader();
 };
