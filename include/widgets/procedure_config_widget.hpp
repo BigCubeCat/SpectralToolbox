@@ -2,6 +2,8 @@
 #define PROCEDURE_CONFIG_WIDGET_HPP
 
 
+#include <QBoxLayout>
+#include <QLabel>
 #include <QWidget>
 
 /*!
@@ -14,6 +16,8 @@ public:
     procedure_config_widget(QWidget *parent = nullptr);
 
 private:
+    std::shared_ptr<QLabel> m_label;
+    std::shared_ptr<QHBoxLayout> m_layout;
     bool m_file_exists;
 
     void setup_ui();
