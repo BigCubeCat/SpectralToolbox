@@ -94,14 +94,15 @@ void tracedata::render_image() {
     }
     auto cols = static_cast<int>(m_image_data[0].size());
 
-    m_image = QImage(cols, rows, QImage::Format_RGB32);
+    m_image = QImage(rows, cols, QImage::Format_RGB32);
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            if (abs(j - m_traceno) < CELL_SIZE) {
-                m_image.setPixelColor(j, i, QColor(255, 0, 0));
+            auto p = pixel(m_image_data[i][j]);
+            if (abs(j - m_traceno) < CELL_SIZE && i < 3 * CELL_SIZE) {
+                m_image.setPixelColor(i, j, QColor(255, 0, 0));
             }
             else {
-                m_image.setPixelColor(j, i, pixel(m_image_data[i][j]));
+                m_image.setPixelColor(i, j, QColor(p, p, p));
             }
         }
     }
@@ -116,10 +117,8 @@ void *tracedata::routine(void *arg) {
     }
 }
 
-QColor tracedata::pixel(float value) const {
-    auto intnsity =
-        static_cast<int>(qBound(0.0f, value / m_max_value, 1.0f) * 255);
-    return { intnsity, intnsity, intnsity };
+int tracedata::pixel(float value) const {
+    return static_cast<int>(qBound(0.0f, value / 100, 1.0f) * 255);
 }
 
 void tracedata::set_crossline(int crossline) {

@@ -18,7 +18,7 @@ private:
     std::thread m_render_thread;
 
 
-    [[nodiscard]] QColor pixel(float value) const;
+    [[nodiscard]] int pixel(float value) const;
     void render_image();
     static void *routine(void *arg);
 
