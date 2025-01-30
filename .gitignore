@@ -2,6 +2,8 @@
 build
 .cache
 .clangd
+.idea
+cmake-build-debug
 
 html
 latex
