@@ -1,21 +1,32 @@
 #ifndef TRACEDATA_HPP
 #define TRACEDATA_HPP
 
-
 #include <QImage>
 #include <QLabel>
 #include <QWidget>
+#include <thread>
 
 class tracedata : public QWidget {
 private:
     QLabel *m_no_data_label;
     QImage m_image;
     int32_t m_crossline = -1;
+    float m_max_value   = 0;
+
+    std::vector<std::vector<float>> m_image_data;
+    std::thread m_render_thread;
+
+
+    [[nodiscard]] QColor pixel(float value) const;
+    void render_image();
+    static void *routine(void *arg);
 
 public:
     tracedata(QWidget *parent = nullptr);
 
     void update_image();
+
+    std::atomic<bool> need_update;
 
 protected:
     void paintEvent(QPaintEvent *event) override;

@@ -59,7 +59,6 @@ segy_reader::segy_reader(std::string filename)
         m_min_inline    = std::min(trace_inline, m_min_inline);
         m_min_crossline = std::min(trace_crossline, m_min_crossline);
 
-        spdlog::info("{};{}", trace_crossline, trace_inline);
         m_inlines.emplace_back(i, trace_inline);
         m_crosslines.emplace_back(i, trace_crossline);
         auto value = m_layers.find(trace_crossline);

@@ -27,7 +27,7 @@ file_widget::file_widget(QWidget *parent)
 
     connect(
         m_spin_layer,
-        QOverload<int>::of(&QSpinBox::valueChanged),
+        &QSpinBox::valueChanged,
         &m_data,
         &tracedata::set_crossline
     );
@@ -56,13 +56,12 @@ void file_widget::set_traceno(int traceno) { }
 
 void file_widget::refresh() {
     m_data.update_image();
-    m_spin_layer->setValue(0);
-    m_spin_layer->setMinimum(0);
     auto *context = datamodel::instance();
     if (context) {
         auto *reader = context->reader();
         if (reader) {
-            m_spin_layer->setMaximum(reader->min_crossline());
+            m_spin_layer->setMinimum(reader->min_crossline());
+            m_spin_layer->setValue(reader->min_crossline());
             m_spin_layer->setMaximum(reader->max_crossline());
         }
         context->unlock_reader();

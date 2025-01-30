@@ -4,12 +4,13 @@
 #include <QPainter>
 
 #include <qimage.h>
+#include <unistd.h>
 
 #include <spdlog/spdlog.h>
 
 #include "datamodel.hpp"
 
-const int COL_SIZE = 50;
+const int CELL_SIZE = 50;
 
 tracedata::tracedata(QWidget *parent)
     : QWidget(parent), m_no_data_label(new QLabel(this)) {
@@ -17,6 +18,8 @@ tracedata::tracedata(QWidget *parent)
     m_image = QImage(0, 0, QImage::Format_RGB32);
     m_no_data_label->setText("Загрузите файл с данными");
     this->resize(200, 200);
+
+    m_render_thread = std::thread(tracedata::routine, this);
 }
 
 void tracedata::paintEvent(QPaintEvent *event) {
@@ -30,6 +33,8 @@ void tracedata::resizeEvent(QResizeEvent *event) {
 }
 
 void tracedata::update_image() {
+    this->need_update.store(false);
+
     auto *data   = datamodel::instance();
     auto *reader = data->reader();
     if (!reader) {
@@ -56,30 +61,64 @@ void tracedata::update_image() {
 
     const int cols = static_cast<int>(reader->trace(traces[0]).size());
 
-    m_image = QImage((rows + 1) * COL_SIZE, cols, QImage::Format_RGB32);
-
+    m_max_value = 0;
+    m_image_data.reserve(size);
     for (int i = 0; i < size; ++i) {
         int traceno = traces[i];
         auto tr     = reader->trace(traceno);
         // Нормализация значения
-        for (int j = 0; j < cols; ++j) {
+        auto row = std::vector<float>(static_cast<long>(cols) * CELL_SIZE);
+        for (int j = 0; j < cols - 1; ++j) {
             float normalized = tr[j];
-            normalized       = qBound(0.0f, normalized, 1.0f);
-            int intensity    = static_cast<int>(normalized * 255);
             auto x = (reader->trace_inline(traceno) - reader->min_inline());
-            x *= COL_SIZE;
-            auto x_end = x + COL_SIZE;
-            for (; x < x_end; ++x) {
-                m_image.setPixelColor(
-                    x, j, QColor(intensity, intensity, intensity)
-                );
+            x *= CELL_SIZE;
+            auto x_end = x + CELL_SIZE;
+            auto dt    = (tr[j + 1] - tr[j]) / CELL_SIZE;
+            for (int k = 0; k < CELL_SIZE; ++k) {
+                row[static_cast<int>(j * CELL_SIZE) + k] =
+                    tr[j] + static_cast<float>(k) * dt;
+                m_max_value = std::max(m_max_value, tr[j]);
             }
         }
+        m_image_data.push_back(row);
     }
+    render_image();
 
     data->unlock_reader();
 }
 
+void tracedata::render_image() {
+    auto rows = static_cast<int>(m_image_data.size());
+    if (rows == 0) {
+        return;
+    }
+    auto cols = static_cast<int>(m_image_data[0].size());
+
+    m_image = QImage(rows, cols, QImage::Format_RGB32);
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            m_image.setPixelColor(i, j, pixel(m_image_data[i][j]));
+        }
+    }
+}
+
+void *tracedata::routine(void *arg) {
+    auto *self = static_cast<tracedata *>(arg);
+    while (true) {
+        if (self->need_update.load()) {
+            self->update_image();
+        }
+    }
+}
+
+QColor tracedata::pixel(float value) const {
+    auto intnsity =
+        static_cast<int>(qBound(0.0f, value / m_max_value, 1.0f) * 255);
+    return { intnsity, intnsity, intnsity };
+}
+
 void tracedata::set_crossline(int crossline) {
-    update_image();
+    spdlog::info("crossline={}", crossline);
+    m_crossline = crossline;
+    this->need_update.store(true);
 }
