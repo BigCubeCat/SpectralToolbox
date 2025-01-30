@@ -5,9 +5,8 @@
 #ifndef SPLINE_H
 #define SPLINE_H
 
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 
-#include "trace.hpp"
 
 using q_matrix = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>;
 
@@ -16,6 +15,7 @@ namespace emd {
 /*!
  * @brief cubic spline
  */
+template <typename E>
 class spline {
 public:
     /*!
@@ -24,14 +24,17 @@ public:
      * @param xs x coordinates of basic points for spline
      * @param ys y coordinates of basic points for spline
      */
-    spline(float_trace xs, float_trace ys);
+    spline(
+        Eigen::Vector<E, Eigen::Dynamic> xs, Eigen::Vector<E, Eigen::Dynamic> ys
+    );
 
     /*!
      * @brief computes values of spline function for given grid
      * @param xs grid
      * @return vector of spline values in grid points
      */
-    float_trace compute(float_trace &xs) const;
+    Eigen::Vector<E, Eigen::Dynamic>
+    compute(Eigen::Vector<E, Eigen::Dynamic> &xs) const;
 
 private:
     /*!
@@ -40,14 +43,19 @@ private:
      * @param right_part vector r in A*x = r
      * @return vector x in A*x = r
      */
-    static float_trace
-    m_run_through_method(const q_matrix &matrix, float_trace &right_part);
+    static Eigen::Vector<E, Eigen::Dynamic> m_run_through_method(
+        const Eigen::Matrix<E, Eigen::Dynamic, Eigen::Dynamic> &matrix,
+        Eigen::Vector<E, Eigen::Dynamic> &right_part
+    );
 
-    float_trace m_gammas;
-    float_trace m_ys;
-    float_trace m_xs;
+    Eigen::Vector<E, Eigen::Dynamic> m_gammas;
+    Eigen::Vector<E, Eigen::Dynamic> m_ys;
+    Eigen::Vector<E, Eigen::Dynamic> m_xs;
 };
 
+
 }    // namespace emd
+
+#include "../src/spline_impl.hpp"
 
 #endif    // SPLINE_H

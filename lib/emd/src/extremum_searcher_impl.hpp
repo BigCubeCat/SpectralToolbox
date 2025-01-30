@@ -2,12 +2,19 @@
 // Created by anton on 1/30/25.
 //
 
+#ifndef EXTREMUM_SEARCHER_IMPL_HPP
+#define EXTREMUM_SEARCHER_IMPL_HPP
 #include "../include/extremum_searcher.h"
+#include "omp.h"
 
 using namespace emd;
 
-std::vector<int> extremum_searcher::search_maxima(
-    const float_trace &f_ys, const int &cnt_threads
+
+template <typename E>
+std::vector<int> extremum_searcher<E>::search_maxima(
+    const Eigen::Vector<E, Eigen::Dynamic> &f_ys,
+    bool check_borders,
+    const int &cnt_threads
 ) {
     std::vector<std::vector<int>> maxima {};
     maxima.resize(cnt_threads);
@@ -28,8 +35,11 @@ std::vector<int> extremum_searcher::search_maxima(
 }
 
 
-std::vector<int> extremum_searcher::search_minima(
-    const float_trace &f_ys, const int &cnt_threads
+template <typename E>
+std::vector<int> extremum_searcher<E>::search_minima(
+    const Eigen::Vector<E, Eigen::Dynamic> &f_ys,
+    bool check_borders,
+    const int &cnt_threads
 ) {
     std::vector<std::vector<int>> minima {};
     minima.resize(cnt_threads);
@@ -48,3 +58,8 @@ std::vector<int> extremum_searcher::search_minima(
 
     return result;
 }
+
+
+
+
+#endif //EXTREMUM_SEARCHER_IMPL_HPP

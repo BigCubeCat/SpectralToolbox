@@ -14,14 +14,17 @@
 			"target_link_libraries",
 			"set_target_properties",
 			"include",
-			"find_package"
+			"find_package",
+			"set_property"
 		],
 		"files" : 
 		[
 			"CMakeLists.txt",
 			"lib/io/CMakeLists.txt",
 			"/usr/lib/x86_64-linux-gnu/cmake/spdlog/spdlogConfigTargets.cmake",
-			"/usr/lib/x86_64-linux-gnu/cmake/spdlog/spdlogConfig.cmake"
+			"/usr/lib/x86_64-linux-gnu/cmake/spdlog/spdlogConfig.cmake",
+			"/home/anton/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/share/cmake-3.30/Modules/FindOpenMP.cmake",
+			"lib/emd/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -74,6 +77,25 @@
 				"file" : 2,
 				"line" : 71,
 				"parent" : 8
+			},
+			{
+				"file" : 5
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 11,
+				"parent" : 10
+			},
+			{
+				"file" : 4,
+				"parent" : 11
+			},
+			{
+				"command" : 5,
+				"file" : 4,
+				"line" : 639,
+				"parent" : 12
 			}
 		]
 	},
@@ -103,6 +125,14 @@
 				{
 					"backtrace" : 2,
 					"path" : "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/io/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/anton/Documents/geohack/SpectralToolbox/lib/emd/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/emd/include"
 				}
 			],
 			"language" : "CXX",
@@ -124,11 +154,15 @@
 	[
 		{
 			"backtrace" : 2,
+			"id" : "common_lib::@9fc5b58572d5f236116a"
+		},
+		{
+			"backtrace" : 2,
 			"id" : "io_lib::@e712b7ee7dd5ea045e24"
 		},
 		{
 			"backtrace" : 2,
-			"id" : "common_lib::@9fc5b58572d5f236116a"
+			"id" : "emd_lib::@e8b6083032a4170de58d"
 		}
 	],
 	"id" : "SpectralToolbox::@6890427a1f51a3e7e1df",
@@ -156,12 +190,17 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "lib/common/libcommon_lib.a",
+				"fragment" : "lib/emd/libemd_lib.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 4,
 				"fragment" : "-lsegyio",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "lib/common/libcommon_lib.a",
 				"role" : "libraries"
 			},
 			{
@@ -172,6 +211,16 @@
 			{
 				"backtrace" : 9,
 				"fragment" : "/usr/lib/x86_64-linux-gnu/libfmt.so.9.1.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "/usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libpthread.a",
 				"role" : "libraries"
 			}
 		],

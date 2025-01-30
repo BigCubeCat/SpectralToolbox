@@ -47,12 +47,12 @@ cmake_ninja_workdir = /home/anton/Documents/geohack/SpectralToolbox/cmake-build-
 #############################################
 # Order-only phony target for SpectralToolbox
 
-build cmake_object_order_depends_target_SpectralToolbox: phony || cmake_object_order_depends_target_common_lib cmake_object_order_depends_target_io_lib
+build cmake_object_order_depends_target_SpectralToolbox: phony || cmake_object_order_depends_target_common_lib cmake_object_order_depends_target_emd_lib cmake_object_order_depends_target_io_lib
 
 build CMakeFiles/SpectralToolbox.dir/src/main.cpp.o: CXX_COMPILER__SpectralToolbox_unscanned_Debug /home/anton/Documents/geohack/SpectralToolbox/src/main.cpp || cmake_object_order_depends_target_SpectralToolbox
   DEP_FILE = CMakeFiles/SpectralToolbox.dir/src/main.cpp.o.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/io/include
+  INCLUDES = -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/io/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/emd/include
   OBJECT_DIR = CMakeFiles/SpectralToolbox.dir
   OBJECT_FILE_DIR = CMakeFiles/SpectralToolbox.dir/src
 
@@ -64,9 +64,9 @@ build CMakeFiles/SpectralToolbox.dir/src/main.cpp.o: CXX_COMPILER__SpectralToolb
 #############################################
 # Link the executable SpectralToolbox
 
-build SpectralToolbox: CXX_EXECUTABLE_LINKER__SpectralToolbox_Debug CMakeFiles/SpectralToolbox.dir/src/main.cpp.o | lib/common/libcommon_lib.a lib/io/libio_lib.a lib/common/libcommon_lib.a /usr/lib/x86_64-linux-gnu/libspdlog.so.1.12.0 /usr/lib/x86_64-linux-gnu/libfmt.so.9.1.0 || lib/common/libcommon_lib.a lib/io/libio_lib.a
+build SpectralToolbox: CXX_EXECUTABLE_LINKER__SpectralToolbox_Debug CMakeFiles/SpectralToolbox.dir/src/main.cpp.o | lib/common/libcommon_lib.a lib/io/libio_lib.a lib/emd/libemd_lib.a lib/common/libcommon_lib.a /usr/lib/x86_64-linux-gnu/libspdlog.so.1.12.0 /usr/lib/x86_64-linux-gnu/libfmt.so.9.1.0 /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || lib/common/libcommon_lib.a lib/emd/libemd_lib.a lib/io/libio_lib.a
   FLAGS = -g
-  LINK_LIBRARIES = lib/common/libcommon_lib.a  lib/io/libio_lib.a  lib/common/libcommon_lib.a  -lsegyio  /usr/lib/x86_64-linux-gnu/libspdlog.so.1.12.0  /usr/lib/x86_64-linux-gnu/libfmt.so.9.1.0
+  LINK_LIBRARIES = lib/common/libcommon_lib.a  lib/io/libio_lib.a  lib/emd/libemd_lib.a  -lsegyio  lib/common/libcommon_lib.a  /usr/lib/x86_64-linux-gnu/libspdlog.so.1.12.0  /usr/lib/x86_64-linux-gnu/libfmt.so.9.1.0  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a
   OBJECT_DIR = CMakeFiles/SpectralToolbox.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -659,30 +659,6 @@ build lib/io/rebuild_cache: phony lib/io/CMakeFiles/rebuild_cache.util
 
 build cmake_object_order_depends_target_emd_lib: phony || cmake_object_order_depends_target_common_lib
 
-build lib/emd/CMakeFiles/emd_lib.dir/src/decomposer.cpp.o: CXX_COMPILER__emd_lib_unscanned_Debug /home/anton/Documents/geohack/SpectralToolbox/lib/emd/src/decomposer.cpp || cmake_object_order_depends_target_emd_lib
-  DEFINES = -DFMT_SHARED -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -DSPDLOG_SHARED_LIB
-  DEP_FILE = lib/emd/CMakeFiles/emd_lib.dir/src/decomposer.cpp.o.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always -fopenmp
-  INCLUDES = -I/home/anton/Documents/geohack/SpectralToolbox/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -isystem /usr/include/eigen3
-  OBJECT_DIR = lib/emd/CMakeFiles/emd_lib.dir
-  OBJECT_FILE_DIR = lib/emd/CMakeFiles/emd_lib.dir/src
-
-build lib/emd/CMakeFiles/emd_lib.dir/src/extremum_searcher.cpp.o: CXX_COMPILER__emd_lib_unscanned_Debug /home/anton/Documents/geohack/SpectralToolbox/lib/emd/src/extremum_searcher.cpp || cmake_object_order_depends_target_emd_lib
-  DEFINES = -DFMT_SHARED -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -DSPDLOG_SHARED_LIB
-  DEP_FILE = lib/emd/CMakeFiles/emd_lib.dir/src/extremum_searcher.cpp.o.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always -fopenmp
-  INCLUDES = -I/home/anton/Documents/geohack/SpectralToolbox/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -isystem /usr/include/eigen3
-  OBJECT_DIR = lib/emd/CMakeFiles/emd_lib.dir
-  OBJECT_FILE_DIR = lib/emd/CMakeFiles/emd_lib.dir/src
-
-build lib/emd/CMakeFiles/emd_lib.dir/src/spline.cpp.o: CXX_COMPILER__emd_lib_unscanned_Debug /home/anton/Documents/geohack/SpectralToolbox/lib/emd/src/spline.cpp || cmake_object_order_depends_target_emd_lib
-  DEFINES = -DFMT_SHARED -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -DSPDLOG_SHARED_LIB
-  DEP_FILE = lib/emd/CMakeFiles/emd_lib.dir/src/spline.cpp.o.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always -fopenmp
-  INCLUDES = -I/home/anton/Documents/geohack/SpectralToolbox/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/emd/include -I/home/anton/Documents/geohack/SpectralToolbox/lib/common/include -I/home/anton/Documents/geohack/SpectralToolbox/cmake-build-debug/lib/common/include -isystem /usr/include/eigen3
-  OBJECT_DIR = lib/emd/CMakeFiles/emd_lib.dir
-  OBJECT_FILE_DIR = lib/emd/CMakeFiles/emd_lib.dir/src
-
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target emd_lib
@@ -691,7 +667,7 @@ build lib/emd/CMakeFiles/emd_lib.dir/src/spline.cpp.o: CXX_COMPILER__emd_lib_uns
 #############################################
 # Link the static library lib/emd/libemd_lib.a
 
-build lib/emd/libemd_lib.a: CXX_STATIC_LIBRARY_LINKER__emd_lib_Debug lib/emd/CMakeFiles/emd_lib.dir/src/decomposer.cpp.o lib/emd/CMakeFiles/emd_lib.dir/src/extremum_searcher.cpp.o lib/emd/CMakeFiles/emd_lib.dir/src/spline.cpp.o || lib/common/libcommon_lib.a
+build lib/emd/libemd_lib.a: CXX_STATIC_LIBRARY_LINKER__emd_lib_Debug || lib/common/libcommon_lib.a
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = lib/emd/CMakeFiles/emd_lib.dir
   POST_BUILD = :

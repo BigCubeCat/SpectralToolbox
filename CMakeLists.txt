@@ -19,7 +19,7 @@ add_executable(${PROJECT_NAME}
 )
 
 # Линковка со статической библиотекой
-target_link_libraries(${PROJECT_NAME} PRIVATE common_lib io_lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE common_lib io_lib emd_lib)
 
 
 # подключение тестов

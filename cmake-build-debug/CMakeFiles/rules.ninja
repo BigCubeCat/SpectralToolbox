@@ -77,16 +77,6 @@ rule CXX_STATIC_LIBRARY_LINKER__io_lib_Debug
 
 
 #############################################
-# Rule for compiling CXX files.
-
-rule CXX_COMPILER__emd_lib_unscanned_Debug
-  depfile = $DEP_FILE
-  deps = gcc
-  command = ${LAUNCHER}${CODE_CHECK}/usr/bin/g++ $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
-  description = Building CXX object $out
-
-
-#############################################
 # Rule for linking CXX static library.
 
 rule CXX_STATIC_LIBRARY_LINKER__emd_lib_Debug
