@@ -14,6 +14,7 @@ add_subdirectory(lib/io)
 add_subdirectory(lib/model)
 
 project(${PROJECT_NAME} LANGUAGES CXX)
+add_subdirectory(lib/emd)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
@@ -46,6 +47,8 @@ PRIVATE
   Qt::Widgets
 )
 
+# Линковка со статической библиотекой
+target_link_libraries(${PROJECT_NAME} PRIVATE common_lib io_lib emd_lib)
 include(GNUInstallDirs)
 
 install(TARGETS ${PROJECT_NAME}
