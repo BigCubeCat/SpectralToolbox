@@ -62,6 +62,17 @@ segy_reader::segy_reader(std::string filename)
         spdlog::info("{};{}", trace_crossline, trace_inline);
         m_inlines.emplace_back(i, trace_inline);
         m_crosslines.emplace_back(i, trace_crossline);
+        auto value = m_layers.find(trace_crossline);
+        if (value == m_layers.end()) {
+            auto vec                  = std::vector<int>(1);
+            vec[0]                    = i;
+            m_layers[trace_crossline] = vec;
+        }
+        else {
+            auto vec = value->second;
+            vec.push_back(i);
+            m_layers[trace_crossline] = vec;
+        }
     }
     std::ranges::sort(m_trace_no, [](auto &left, auto &right) {
         return left.second < right.second;
@@ -136,6 +147,18 @@ int32_t segy_reader::trace_inline(int index) {
 
 int32_t segy_reader::trace_crossline(int index) {
     return m_crosslines[m_trace_no[index].first].second;
+}
+
+int32_t segy_reader::trace_id(int index) {
+    return m_trace_no[m_trace_no[index].first].second;
+}
+
+std::vector<int> segy_reader::get_crossline_layer(int32_t crossline) {
+    auto result = m_layers.find(crossline);
+    if (result != m_layers.end()) {
+        return result->second;
+    }
+    throw std::runtime_error("not found " + std::to_string(crossline));
 }
 
 segy_reader::~segy_reader() {

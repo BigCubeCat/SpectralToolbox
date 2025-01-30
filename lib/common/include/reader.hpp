@@ -34,4 +34,7 @@ public:
     virtual int32_t trace_inline(int index) = 0;
     /// возращает TR_CROSSLINE по номеру трассы
     virtual int32_t trace_crossline(int index) = 0;
+    virtual int32_t trace_id(int index)        = 0;
+
+    virtual std::vector<int> get_crossline_layer(int32_t crossline) = 0;
 };

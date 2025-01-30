@@ -2,6 +2,7 @@
 
 #include <array>
 #include <climits>
+#include <map>
 #include <string>
 
 #include <segyio/segy.h>
@@ -26,7 +27,6 @@ private:
     int m_min_inline    = INT_MAX;
     int m_min_crossline = INT_MAX;
 
-
     long m_trace0;
     std::string m_input_file_name;
 
@@ -36,6 +36,8 @@ private:
     std::vector<std::pair<int, int32_t>> m_crosslines;
     std::vector<std::pair<int, int32_t>> m_inlines;
     std::vector<std::vector<char>> m_traceheaders;
+
+    std::map<int, std::vector<int>> m_layers;
 
     segy_file *m_segy_file_ptr = nullptr;
 
@@ -64,4 +66,7 @@ public:
     int32_t trace_inline(int index) override;
 
     int32_t trace_crossline(int index) override;
+    int32_t trace_id(int index) override;
+
+    std::vector<int> get_crossline_layer(int32_t crossline) override;
 };
