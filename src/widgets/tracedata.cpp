@@ -5,6 +5,8 @@
 
 #include <qimage.h>
 
+#include <spdlog/spdlog.h>
+
 #include "datamodel.hpp"
 
 tracedata::tracedata(QWidget *parent)
@@ -33,31 +35,31 @@ void tracedata::update_image() {
         return;
     }
 
-    const int cols = reader->count_traces();
-    if (cols == 0) {
-        return;
-    }
-    const int rows = static_cast<int>(reader->trace(0).size());
+    const int cols = reader->max_crossline() - reader->min_crossline();
+    const int rows = reader->max_inline() - reader->min_inline();
 
-    m_image = QImage(cols, rows, QImage::Format_RGB32);
+    spdlog::info("rows, cols = {} {} ", rows, cols);
 
-    for (int x = 0; x < cols; ++x) {
-        auto row = reader->trace(x);
+    m_image = QImage(rows + 1, cols + 1, QImage::Format_RGB32);
+    // this->resize(rows, cols);
+
+    const int count_traces = reader->count_traces();
+
 #pragma omp parallel for
-        for (int y = 0; y < rows; ++y) {
-            // Нормализация значения
-            float normalized = row[y];
-            normalized       = qBound(0.0f, normalized, 1.0f);
-
-            // Преобразование в градации серого
-            int intensity = static_cast<int>(normalized * 255);
-            m_image.setPixelColor(
-                x, y, QColor(intensity, intensity, intensity)
-            );
-        }
+    for (int traceno = 0; traceno < count_traces; ++traceno) {
+        auto pixel = reader->trace_point(traceno, 100);
+        // Нормализация значения
+        float normalized = pixel;
+        spdlog::info("pixel={}", pixel);
+        normalized    = qBound(0.0f, normalized, 1.0f);
+        int intensity = static_cast<int>(normalized * 255);
+        auto x        = reader->trace_inline(traceno) - reader->min_inline();
+        auto y = reader->trace_crossline(traceno) - reader->min_crossline();
+        spdlog::info("x, y = {} {}", x, y);
+        m_image.setPixelColor(x, y, QColor(intensity, intensity, intensity));
     }
 
-    m_image =
-        m_image.scaled(size(), Qt::KeepAspectRatio, Qt::FastTransformation);
+    m_image = m_image.scaled(rows, cols);
+
     data->unlock_reader();
 }

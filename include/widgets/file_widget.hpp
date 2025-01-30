@@ -17,6 +17,7 @@
 class file_widget : public QWidget {
 private:
     int m_current_trace = 0;
+    int m_current_layer = 0;
 
     QVBoxLayout *m_layout;
 
