@@ -13,6 +13,8 @@ main_window::main_window(QWidget *parent)
     m_param_widget = std::make_shared<procedure_config_widget>(this);
     m_ui->paramLayout->addWidget(m_param_widget.get());
 
+    this->setWindowTitle("Spectral Toolbox");
+
     connect(
         m_ui->actionOpen_SEG_Y_file,
         &QAction::triggered,

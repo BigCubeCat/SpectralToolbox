@@ -2,8 +2,10 @@
 
 #include <QImage>
 #include <QPainter>
+#include <algorithm>
 
 #include <qimage.h>
+#include <qminmax.h>
 #include <unistd.h>
 
 #include <spdlog/spdlog.h>
@@ -97,12 +99,11 @@ void tracedata::render_image() {
     m_image = QImage(rows, cols, QImage::Format_RGB32);
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            auto p = pixel(m_image_data[i][j]);
-            if (abs(j - m_traceno) < CELL_SIZE && i < 3 * CELL_SIZE) {
+            if (abs(j - m_traceno) < CELL_SIZE) {
                 m_image.setPixelColor(i, j, QColor(255, 0, 0));
             }
             else {
-                m_image.setPixelColor(i, j, QColor(p, p, p));
+                m_image.setPixelColor(i, j, pixel(m_image_data[i][j]));
             }
         }
     }
@@ -117,8 +118,9 @@ void *tracedata::routine(void *arg) {
     }
 }
 
-int tracedata::pixel(float value) const {
-    return static_cast<int>(qBound(0.0f, value / 100, 1.0f) * 255);
+QColor tracedata::pixel(float value) const {
+    auto v = static_cast<int>(qBound(0.0f, value / 100, 1.0f) * 255);
+    return { v, v, v };
 }
 
 void tracedata::set_crossline(int crossline) {

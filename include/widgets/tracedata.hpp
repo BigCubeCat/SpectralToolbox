@@ -18,7 +18,7 @@ private:
     std::thread m_render_thread;
 
 
-    [[nodiscard]] int pixel(float value) const;
+    [[nodiscard]] QColor pixel(float value) const;
     void render_image();
     static void *routine(void *arg);
 
@@ -29,7 +29,7 @@ public:
 
     std::atomic<bool> need_update;
 
-    ~tracedata();
+    ~tracedata() override;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
