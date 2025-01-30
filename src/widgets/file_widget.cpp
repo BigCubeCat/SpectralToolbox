@@ -31,6 +31,9 @@ file_widget::file_widget(QWidget *parent)
         &m_data,
         &tracedata::set_crossline
     );
+    connect(
+        m_spin_box, &QSpinBox::valueChanged, &m_data, &tracedata::set_traceid
+    );
 }
 
 void file_widget::setup_ui() {
@@ -60,6 +63,10 @@ void file_widget::refresh() {
     if (context) {
         auto *reader = context->reader();
         if (reader) {
+            m_spin_box->setMinimum(0);
+            m_spin_box->setValue(0);
+            m_spin_box->setMaximum(reader->count_traces());
+
             m_spin_layer->setMinimum(reader->min_crossline());
             m_spin_layer->setValue(reader->min_crossline());
             m_spin_layer->setMaximum(reader->max_crossline());

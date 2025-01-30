@@ -10,6 +10,7 @@ class tracedata : public QWidget {
 private:
     QLabel *m_no_data_label;
     QImage m_image;
+    int m_traceno       = 0;
     int32_t m_crossline = -1;
     float m_max_value   = 0;
 
@@ -28,12 +29,15 @@ public:
 
     std::atomic<bool> need_update;
 
+    ~tracedata();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
 public slots:
     void set_crossline(int crossline);
+    void set_traceid(int traceno);
 };
 
 #endif
