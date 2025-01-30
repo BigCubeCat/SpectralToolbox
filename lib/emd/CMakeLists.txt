@@ -14,13 +14,7 @@ include_directories(include)
 file(GLOB_RECURSE SOURCES src/*.cpp include/*.hpp)
 file(GLOB_RECURSE HEADERS include/*.h)
 
-add_library(${LIB_NAME} STATIC ${SOURCES} ${HEADERS}
-        include/extremum_searcher.h
-        include/spline.h
-        include/decomposer.h
-        src/extremum_searcher_impl.hpp
-        src/spline_impl.hpp
-        src/decomposer_impl.hpp)
+add_library(${LIB_NAME} STATIC ${SOURCES} ${HEADERS})
 
 target_include_directories(${LIB_NAME}
         PUBLIC

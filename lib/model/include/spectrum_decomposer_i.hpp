@@ -11,13 +11,14 @@
 
 class spectrum_decomposer_i {
 public:
+    virtual ~spectrum_decomposer_i() = default;
     /*!
      * @brief разбивает выбранную трассу на компоненты
      * @param path путь до файла с кубом данных
      * @param index индекс трассы в кубе данных
      * @return вектор выделенных компонеет
      */
-    std::vector<float_trace> examine(const char *path, long index);
+    virtual std::vector<float_trace> examine(const std::string &path, long index) = 0;
 
     /*!
      * @brief выделяет из трасс куба 3  заданные компоненты. Файлы с
@@ -29,13 +30,13 @@ public:
      * @param green частота для зеленого цвета
      * @param blue частота для синего цвета
      */
-    void decompose(
-        const char *input_file,
-        const char *output_dir,
+    virtual void decompose(
+        const std::string &input_file,
+        const std::string &output_dir,
         int red,
         int green,
         int blue
-    );
+    ) = 0;
 };
 
 

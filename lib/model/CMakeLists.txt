@@ -14,23 +14,21 @@ include_directories(include)
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS include/*.h include/*.hpp)
 
-add_library(${LIB_NAME} STATIC ${SOURCES} ${HEADERS}
-        include/spectrum_decomposer_i.hpp
-        src/em_decomposer.cpp
-        include/em_decomposer.hpp)
+add_library(${LIB_NAME} STATIC ${SOURCES} ${HEADERS})
 
 target_include_directories(${LIB_NAME}
-    PUBLIC
+        PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>")
 
 
 target_link_libraries(${PROJECT_NAME}
-PUBLIC
-segyio
-PRIVATE
-io_lib
-common_lib
-spdlog::spdlog 
-Eigen3::Eigen
+        PUBLIC
+        segyio
+        PRIVATE
+        io_lib
+        emd_lib
+        common_lib
+        spdlog::spdlog
+        Eigen3::Eigen
 )
