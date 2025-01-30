@@ -15,7 +15,9 @@ file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS include/*.h include/*.hpp)
 
 add_library(${LIB_NAME} STATIC ${SOURCES} ${HEADERS}
-        include/spectrum_decomposer_i.hpp)
+        include/spectrum_decomposer_i.hpp
+        src/em_decomposer.cpp
+        include/em_decomposer.hpp)
 
 target_include_directories(${LIB_NAME}
     PUBLIC

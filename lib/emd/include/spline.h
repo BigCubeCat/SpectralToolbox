@@ -39,7 +39,7 @@ public:
 private:
     /*!
      * @brief run-through method of searching matrix equal A*x = r solutions
-     * @param matrix matix A of coefficients in A*x = r
+     * @param matrix matrix A of coefficients in A*x = r
      * @param right_part vector r in A*x = r
      * @return vector x in A*x = r
      */
