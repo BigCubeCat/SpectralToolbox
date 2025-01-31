@@ -12,7 +12,7 @@
 
 #include "datamodel.hpp"
 
-const int CELL_SIZE = 50;
+const int CELL_SIZE = 1;
 
 tracedata::tracedata(QWidget *parent)
     : QWidget(parent), m_no_data_label(new QLabel(this)) {
@@ -64,29 +64,23 @@ void tracedata::update_image() {
     const int cols = static_cast<int>(reader->trace(traces[0]).size());
 
     m_max_value = 0;
-    m_image_data.reserve(size);
+    m_image_data.resize(size);
     for (int i = 0; i < size; ++i) {
         int traceno = traces[i];
         auto tr     = reader->trace(traceno);
-        // Нормализация значения
-        auto row = std::vector<float>(static_cast<long>(cols) * CELL_SIZE);
+        auto row =
+            std::vector<std::pair<float, int32_t>>(static_cast<long>(cols));
+#pragma omp parallel for
         for (int j = 0; j < cols - 1; ++j) {
             float normalized = tr[j];
             auto x = (reader->trace_inline(traceno) - reader->min_inline());
-            x *= CELL_SIZE;
-            auto x_end = x + CELL_SIZE;
-            auto dt    = (tr[j + 1] - tr[j]) / CELL_SIZE;
-            for (int k = 0; k < CELL_SIZE; ++k) {
-                row[static_cast<int>(j * CELL_SIZE) + k] =
-                    tr[j] + static_cast<float>(k) * dt;
-                m_max_value = std::max(m_max_value, tr[j]);
-            }
+            row[j] = { tr[j], i };
+            m_max_value = std::max(m_max_value, tr[j]);
         }
-        m_image_data.push_back(row);
+        m_image_data[i] = row;
     }
-    render_image();
-
     data->unlock_reader();
+    render_image();
 }
 
 void tracedata::render_image() {
@@ -99,14 +93,19 @@ void tracedata::render_image() {
     m_image = QImage(rows, cols, QImage::Format_RGB32);
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            if (abs(j - m_traceno) < CELL_SIZE) {
-                m_image.setPixelColor(i, j, QColor(255, 0, 0));
+            auto p = pixel(m_image_data[i][j].first);
+            if (m_image_data[i][j].second == m_traceno) {
+                p.setRed(0);
+                p.setGreen(200);
+                p.setBlue(0);
             }
-            else {
-                m_image.setPixelColor(i, j, pixel(m_image_data[i][j]));
-            }
+            m_image.setPixelColor(i, j, p);
         }
     }
+    // auto selected_color = QColor(255, 128, 0);
+    // for (const auto &p : current_trace_point) {
+    //     m_image.setPixelColor(p.first, p.second, selected_color);
+    // }
 }
 
 void *tracedata::routine(void *arg) {
@@ -119,12 +118,11 @@ void *tracedata::routine(void *arg) {
 }
 
 QColor tracedata::pixel(float value) const {
-    auto v = static_cast<int>(qBound(0.0f, value / 100, 1.0f) * 255);
+    auto v = static_cast<int>(qBound(0.0f, value / m_max_value, 1.0f) * 255);
     return { v, v, v };
 }
 
 void tracedata::set_crossline(int crossline) {
-    spdlog::info("crossline={}", crossline);
     m_crossline = crossline;
     this->need_update.store(true);
 }
