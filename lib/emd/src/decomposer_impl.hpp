@@ -36,6 +36,13 @@ Eigen::Vector<E, Eigen::Dynamic> generate_grid(long int count) {
 }
 
 template <typename E>
+void product_window( Eigen::Vector<E, Eigen::Dynamic> &trace) {
+    for (long i =0; i < trace.size(); i++) {
+        trace[i] *= 0.65 - 0.35 * std::cos(2 * M_PI * i / trace.size());
+    }
+}
+
+template <typename E>
 std::vector<Eigen::Vector<E, Eigen::Dynamic>>
 decomposer<E>::decompose_signal(const Eigen::Vector<E, Eigen::Dynamic> &trace) {
     extremum_searcher<E> searcher;
@@ -50,7 +57,8 @@ decomposer<E>::decompose_signal(const Eigen::Vector<E, Eigen::Dynamic> &trace) {
 
         Eigen::Vector<E, Eigen::Dynamic> iteration(rest);    // основа для
                                                              // выделяемой моды
-
+        //умножаем трассу на окно Ханна для снятия граничных эффектов
+        product_window<E>(iteration);
         for (long i = 0; i < m_max_iterations; i++) {
             //поиск экстремумов
             std::vector<int> top_points = searcher.search_maxima(iteration,false, 8);

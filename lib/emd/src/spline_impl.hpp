@@ -20,7 +20,7 @@ spline<E>::spline(
     Eigen::Matrix<E,Eigen::Dynamic,Eigen::Dynamic> coefficients(xs.size(), xs.size());
     coefficients.setZero();
 
-    coefficients(0, 0) = 2 * (xs[1] - xs[0]);    // read the manual of splines
+    coefficients(0, 0) = 2 * (xs[1] - xs[0]);    // read the manual of splines to understand
     coefficients(0, 1) = xs[1] - xs[0];
 
     for (long i = 1, end = coefficients.cols() - 1; i != end; ++i) {

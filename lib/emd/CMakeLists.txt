@@ -29,3 +29,5 @@ target_link_libraries(${PROJECT_NAME}
         Eigen3::Eigen
         OpenMP::OpenMP_CXX
 )
+
+target_compile_options(${PROJECT_NAME} PUBLIC -fopenmp)

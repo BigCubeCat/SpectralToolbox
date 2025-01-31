@@ -34,12 +34,12 @@ void em_decomposer::decompose(
     int green,
     int blue
 ) {
-    int cnt_threads = 4;
+    int cnt_threads = 8;
     // открываем файл на чтение и 3 файла на запись
     segy_reader reader { input_file };
     char *binheader = reader.binheader();
-    int sub_start = input_file.rfind('/') + 1;
-    int sub_end   = input_file.rfind('.');
+    int sub_start   = input_file.rfind('/') + 1;
+    int sub_end     = input_file.rfind('.');
     std::string output_filename =
         input_file.substr(sub_start, sub_end - sub_start);
     std::string red_file   = output_dir + "/" + output_filename + "_r.sgy";
@@ -56,36 +56,58 @@ void em_decomposer::decompose(
     int min_crossline = reader.min_crossline();
     int max_crossline = reader.max_crossline();
 
-    std::vector<segy_reader> readers;
-    for (int i = 0; i < cnt_threads; ++i) {
+    std::vector<segy_reader> readers {};
+    for (int i = 0; i < cnt_threads; i++) {
         readers.emplace_back(input_file);
     }
 
-    std::cout << "I am alive!\n";
-
-#pragma omp parallel for num_threads(cnt_threads)
     for (int i = min_crossline; i <= max_crossline; ++i) {
         // берем индексы разреза
-        std::vector<int> idxs =
-            readers[omp_get_thread_num()].get_crossline_layer(i);
+        std::vector<int> idxs = reader.get_crossline_layer(i);
 
+        std::vector<float_trace> red_line_traces { idxs.size() };
+        std::vector<float_trace> blue_line_traces { idxs.size() };
+        std::vector<float_trace> green_line_traces { idxs.size() };
+        std::vector<std::vector<char>> line_trace_headers { idxs.size() };
         // для каждого разреза делаем декомпозицию
-        for (auto &j : idxs) {
-            std::vector<char> trace_header = readers[omp_get_thread_num()].traceheader(j);
-            float_trace trace = readers[omp_get_thread_num()].trace(j);
+#pragma omp parallel for proc_bind(spread) num_threads(cnt_threads)
+        for (int j = 0; j < idxs.size(); ++j) {
+            line_trace_headers[j] =
+                readers[omp_get_thread_num()].traceheader(idxs[j]);
+            float_trace trace = readers[omp_get_thread_num()].trace(idxs[j]);
+            std::vector<float_trace> results =
+                m_decomposer.decompose_signal(trace);
+            red_line_traces[j]   = results[0];
+            green_line_traces[j] = results[1];
+            blue_line_traces[j]  = results[2];
+        }
 
-            std::vector<float_trace> results = m_decomposer.decompose_signal(trace);
-
-            // сохраняем в файл
+        // сохраняем в файлы
+#pragma omp parallel proc_bind(spread) num_threads(3)
+        {
 #pragma omp critical(red)
-            writer_red.write_traceheader(j,trace_header);
-            writer_red.write_trace(j, results[0]);
+            {
+                for (int j = 0; j < idxs.size(); ++j) {
+                    writer_red.write_traceheader(idxs[j], line_trace_headers[j]);
+                    writer_red.write_trace(idxs[j], red_line_traces[j]);
+                }
+            }
+
 #pragma omp critical(green)
-            writer_green.write_traceheader(j,trace_header);
-            writer_green.write_trace(j, results[1]);
+            {
+                for (int j = 0; j < idxs.size(); ++j) {
+                    writer_green.write_traceheader(idxs[j], line_trace_headers[j]);
+                    writer_green.write_trace(idxs[j], green_line_traces[j]);
+                }
+            }
+
 #pragma omp critical(blue)
-            writer_blue.write_traceheader(j,trace_header);
-            writer_blue.write_trace(j, results[2]);
+            {
+                for (int j = 0; j < idxs.size(); ++j) {
+                    writer_blue.write_traceheader(idxs[j], line_trace_headers[j]);
+                    writer_blue.write_trace(idxs[j], blue_line_traces[j]);
+                }
+            }
         }
     }
 }
