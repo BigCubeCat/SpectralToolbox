@@ -14,7 +14,7 @@ private:
     int32_t m_crossline = -1;
     float m_max_value   = 0;
 
-    std::vector<std::vector<float>> m_image_data;
+    std::vector<std::vector<std::pair<float, int32_t>>> m_image_data;
     std::thread m_render_thread;
 
 
