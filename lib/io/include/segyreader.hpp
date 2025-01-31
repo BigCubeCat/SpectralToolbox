@@ -7,7 +7,7 @@
 
 #include <segyio/segy.h>
 
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 
 #include "reader.hpp"
 
@@ -32,7 +32,7 @@ private:
 
     std::array<char, SEGY_BINARY_HEADER_SIZE> m_binheader {};
 
-    std::vector<std::pair<int, int32_t>> m_trace_no;
+    std::vector<int32_t> m_trace_no;
     std::vector<std::pair<int, int32_t>> m_crosslines;
     std::vector<std::pair<int, int32_t>> m_inlines;
     std::vector<std::vector<char>> m_traceheaders;
@@ -43,6 +43,8 @@ private:
 
 public:
     explicit segy_reader(std::string filename);
+    segy_reader(const segy_reader &) = default;
+    segy_reader(segy_reader &&) = default;
     ~segy_reader() override;
 
     char *binheader() override;

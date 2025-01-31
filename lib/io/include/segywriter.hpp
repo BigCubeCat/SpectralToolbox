@@ -5,7 +5,7 @@
 
 #include <segyio/segy.h>
 
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 
 #include "writer.hpp"
 
@@ -22,6 +22,7 @@ private:
     int m_format               = 5;
     int m_traces               = 0;
     long m_trace0              = 0;
+
 
 public:
     explicit segy_writer(std::string filename);

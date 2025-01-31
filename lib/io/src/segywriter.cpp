@@ -1,5 +1,6 @@
 #include "segywriter.hpp"
 
+#include <iostream>
 #include <stdexcept>
 
 #include <segyio/segy.h>
