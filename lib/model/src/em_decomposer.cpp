@@ -34,7 +34,7 @@ void em_decomposer::decompose(
     int green,
     int blue
 ) {
-    int cnt_threads = 1;
+    int cnt_threads = 4;
     // открываем файл на чтение и 3 файла на запись
     segy_reader reader { input_file };
     char *binheader = reader.binheader();

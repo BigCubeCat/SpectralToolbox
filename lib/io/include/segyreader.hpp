@@ -32,7 +32,7 @@ private:
 
     std::array<char, SEGY_BINARY_HEADER_SIZE> m_binheader {};
 
-    std::vector<std::pair<int, int32_t>> m_trace_no;
+    std::vector<int32_t> m_trace_no;
     std::vector<std::pair<int, int32_t>> m_crosslines;
     std::vector<std::pair<int, int32_t>> m_inlines;
     std::vector<std::vector<char>> m_traceheaders;

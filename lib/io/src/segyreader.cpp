@@ -31,7 +31,7 @@ segy_reader::segy_reader(std::string filename)
         spdlog::critical("cant read traceno: status={}", status);
         throw std::runtime_error("cant read count traces");
     }
-    m_trace_no = std::vector<std::pair<int, int32_t>>(m_traces);
+    m_trace_no = std::vector<int32_t>(m_traces);
     for (int i = 0; i < m_traces; ++i) {
         auto tr_header = traceheader(i);
         m_traceheaders.push_back(tr_header);
@@ -40,7 +40,7 @@ segy_reader::segy_reader(std::string filename)
         if (status != 0) {
             spdlog::error("status={}", status);
         }
-        m_trace_no[i] = std::pair<int, int32_t>(i, field);
+        m_trace_no[i] = field;
 
         int32_t trace_crossline;
         int32_t trace_inline;
@@ -90,7 +90,7 @@ int segy_reader::count_traces() {
 
 float_trace segy_reader::trace(int index) {
     Eigen::Vector<float, Eigen::Dynamic> trace(m_samples);
-    int traceno = m_trace_no[index].first;
+    int traceno = index;
     auto err    = segy_readtrace(
         m_segy_file_ptr, traceno, trace.data(), m_trace0, m_bsize
     );
@@ -143,15 +143,15 @@ int32_t segy_reader::min_inline() {
 }
 
 int32_t segy_reader::trace_inline(int index) {
-    return m_inlines[m_trace_no[index].first].second;
+    return m_inlines[m_trace_no[index]].second;
 }
 
 int32_t segy_reader::trace_crossline(int index) {
-    return m_crosslines[m_trace_no[index].first].second;
+    return m_crosslines[m_trace_no[index]].second;
 }
 
 int32_t segy_reader::trace_id(int index) {
-    return m_trace_no[m_trace_no[index].first].second;
+    return index;
 }
 
 std::vector<int> segy_reader::get_crossline_layer(int32_t crossline) {
@@ -163,8 +163,8 @@ std::vector<int> segy_reader::get_crossline_layer(int32_t crossline) {
 }
 
 segy_reader::~segy_reader() {
-    auto status = segy_close(m_segy_file_ptr);
+    /*auto status = segy_close(m_segy_file_ptr);
     if (status != 0) {
         spdlog::critical("error during segy_close: status={}", status);
-    }
+    }*/
 }
