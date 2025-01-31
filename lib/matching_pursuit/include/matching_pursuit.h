@@ -1,5 +1,5 @@
 #pragma once
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 
 template<typename T>
 class matching_pursuit {
@@ -13,5 +13,7 @@ class matching_pursuit {
     matrix get_dict(int wavelet_length, T step_time_s);
     
     public:
-    std::vector<std::pair<int, trace>> decompose_signal(trace gather, int trace_size, T step_time_ms, T max_amplitude);
+    std::vector<trace> decompose_signal(trace gather, int trace_size, T step_time_ms, T max_amplitude);
 };
+
+#include "../impl/matching_pursuit.hpp"

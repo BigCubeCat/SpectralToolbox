@@ -26,6 +26,7 @@ target_link_libraries(${PROJECT_NAME}
         PUBLIC
         segyio
         emd_lib
+        mp_lib
         PRIVATE
         io_lib
         common_lib

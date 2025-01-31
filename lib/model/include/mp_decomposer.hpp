@@ -20,6 +20,6 @@ public:
 private:
     float m_step_time_s;
     float m_max_amplitude;
-    matching_pursuit<float> decomposer;
+    matching_pursuit<float> m_decomposer;
 };
 

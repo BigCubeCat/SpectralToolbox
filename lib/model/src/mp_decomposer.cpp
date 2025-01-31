@@ -2,21 +2,21 @@
 // Created by anton on 1/31/25.
 //
 
-#include "../include/mp_decomposer.hpp"
+#include "mp_decomposer.hpp"
 
 #include <iostream>
 
 #include "segyreader.hpp"
 #include "segywriter.hpp"
 
-mp_decomposer::mp_decomposer(float step_time_s, float max_amplitude) : m_step_time_s(m_step_time_s), m_max_aplitude(max_amplitude) {};
+mp_decomposer::mp_decomposer(float step_time_s, float max_amplitude) : m_step_time_s(m_step_time_s), m_max_amplitude(max_amplitude) {};
 
 
 std::vector<float_trace>
 mp_decomposer::examine(const std::string &path, long index) {
     segy_reader reader { path };
     float_trace trace = reader.trace(index);
-    return m_decomposer.decompose_signal(trace);
+    return m_decomposer.decompose_signal(trace, trace.size(), m_step_time_s, m_max_amplitude);
 }
 
 
@@ -67,18 +67,18 @@ void mp_decomposer::decompose(
             std::vector<char> trace_header = readers[omp_get_thread_num()].traceheader(j);
             float_trace trace = readers[omp_get_thread_num()].trace(j);
 
-            std::vector<float_trace> full_spectrum = m_decomposer.decompose_signal(trace);
+            std::vector<float_trace> full_spectrum = m_decomposer.decompose_signal(trace, trace.size(), m_step_time_s, m_max_amplitude);
 
             // сохраняем в файл
 //#pragma omp critical(red)
             writer_red.write_traceheader(j,trace_header);
-            writer_red.write_trace(j, results[red]);
+            writer_red.write_trace(j, full_spectrum[red]);
 //#pragma omp critical(green)
             writer_green.write_traceheader(j,trace_header);
-            writer_green.write_trace(j, results[green]);
+            writer_green.write_trace(j, full_spectrum[green]);
 //#pragma omp critical(blue)
             writer_blue.write_traceheader(j,trace_header);
-            writer_blue.write_trace(j, results[blue]);
+            writer_blue.write_trace(j, full_spectrum[blue]);
         }
     }
 }
