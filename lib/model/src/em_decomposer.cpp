@@ -4,12 +4,14 @@
 
 #include "../include/em_decomposer.hpp"
 
+#include <iostream>
+
 #include "omp.h"
 #include "segyreader.hpp"
 #include "segywriter.hpp"
 
 em_decomposer::em_decomposer(
-    int max_iterations, int max_modes_cnt, int min_oscillation
+    int max_iterations, int max_modes_cnt, float min_oscillation
 ) {
     m_decomposer.m_max_iterations  = max_iterations;
     m_decomposer.m_max_result_size = max_modes_cnt;
@@ -32,7 +34,7 @@ void em_decomposer::decompose(
     int green,
     int blue
 ) {
-    int cnt_threads = 8;
+    int cnt_threads = 1;
     // открываем файл на чтение и 3 файла на запись
     segy_reader reader { input_file };
     char *binheader = reader.binheader();
@@ -40,9 +42,9 @@ void em_decomposer::decompose(
     int sub_end   = input_file.rfind('.');
     std::string output_filename =
         input_file.substr(sub_start, sub_end - sub_start);
-    std::string red_file   = output_dir + "/" + output_filename + "_r.segy";
-    std::string green_file = output_dir + "/" + output_filename + "_g.segy";
-    std::string blue_file  = output_dir + "/" + output_filename + "_b.segy";
+    std::string red_file   = output_dir + "/" + output_filename + "_r.sgy";
+    std::string green_file = output_dir + "/" + output_filename + "_g.sgy";
+    std::string blue_file  = output_dir + "/" + output_filename + "_b.sgy";
     segy_writer writer_red { red_file };
     writer_red.write_binheader(binheader);
     segy_writer writer_green { green_file };
@@ -59,24 +61,30 @@ void em_decomposer::decompose(
         readers.emplace_back(input_file);
     }
 
+    std::cout << "I am alive!\n";
+
 #pragma omp parallel for num_threads(cnt_threads)
-    for (int i = min_crossline; i < max_crossline; i++) {
+    for (int i = min_crossline; i <= max_crossline; ++i) {
         // берем индексы разреза
         std::vector<int> idxs =
             readers[omp_get_thread_num()].get_crossline_layer(i);
 
         // для каждого разреза делаем декомпозицию
         for (auto &j : idxs) {
+            std::vector<char> trace_header = readers[omp_get_thread_num()].traceheader(j);
             float_trace trace = readers[omp_get_thread_num()].trace(j);
 
             std::vector<float_trace> results = m_decomposer.decompose_signal(trace);
 
             // сохраняем в файл
 #pragma omp critical(red)
+            writer_red.write_traceheader(j,trace_header);
             writer_red.write_trace(j, results[0]);
 #pragma omp critical(green)
+            writer_green.write_traceheader(j,trace_header);
             writer_green.write_trace(j, results[1]);
 #pragma omp critical(blue)
+            writer_blue.write_traceheader(j,trace_header);
             writer_blue.write_trace(j, results[2]);
         }
     }

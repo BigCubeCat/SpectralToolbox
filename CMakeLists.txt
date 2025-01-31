@@ -11,10 +11,11 @@ find_package(spdlog REQUIRED)
 
 add_subdirectory(lib/common)
 add_subdirectory(lib/io)
+add_subdirectory(lib/emd)
 add_subdirectory(lib/model)
 
 project(${PROJECT_NAME} LANGUAGES CXX)
-add_subdirectory(lib/emd)
+
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 

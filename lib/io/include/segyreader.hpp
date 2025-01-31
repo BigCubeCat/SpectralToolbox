@@ -7,7 +7,7 @@
 
 #include <segyio/segy.h>
 
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 
 #include "reader.hpp"
 
@@ -43,6 +43,8 @@ private:
 
 public:
     explicit segy_reader(std::string filename);
+    segy_reader(const segy_reader &) = default;
+    segy_reader(segy_reader &&) = default;
     ~segy_reader() override;
 
     char *binheader() override;

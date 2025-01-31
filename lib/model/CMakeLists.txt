@@ -25,9 +25,9 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
         segyio
+        emd_lib
         PRIVATE
         io_lib
-        emd_lib
         common_lib
         spdlog::spdlog
         Eigen3::Eigen

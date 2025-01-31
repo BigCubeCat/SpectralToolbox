@@ -11,7 +11,7 @@
 class em_decomposer: public spectrum_decomposer_i {
 public:
     em_decomposer() = default;
-    em_decomposer(int max_iterations, int max_modes_cnt, int min_oscillation);
+    em_decomposer(int max_iterations, int max_modes_cnt, float min_oscillation);
 
     std::vector<float_trace> examine(const std::string &path, long index) override;
 

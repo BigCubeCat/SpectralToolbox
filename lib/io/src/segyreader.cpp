@@ -1,6 +1,7 @@
 #include "segyreader.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 
@@ -25,7 +26,7 @@ segy_reader::segy_reader(std::string filename)
     m_trace0  = segy_trace0(m_binheader.data());
     m_bsize   = segy_trace_bsize(m_samples);
     status    = segy_traces(m_segy_file_ptr, &m_traces, m_trace0, m_bsize);
-
+    std::cout << m_format << " " << m_samples << " " << m_trace0 << " " << m_bsize << std::endl;
     if (status != 0) {
         spdlog::critical("cant read traceno: status={}", status);
         throw std::runtime_error("cant read count traces");
