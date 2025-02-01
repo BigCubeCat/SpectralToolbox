@@ -60,7 +60,7 @@ void main_window::open_segy_file() {
 }
 
 void main_window::refresh(bool update_settings) {
-    m_data.need_update.store(true);
+    m_data.set_need_update(true);
     if (!update_settings)
         return;
     auto *context = datamodel::instance();

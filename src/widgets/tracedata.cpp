@@ -34,7 +34,7 @@ void tracedata::resizeEvent(QResizeEvent *event) {
 }
 
 void tracedata::update_image() {
-    this->need_update.store(false);
+    m_need_update.store(false);
 
     auto *data   = datamodel::instance();
     auto *reader = data->reader();
@@ -108,7 +108,7 @@ void tracedata::render_image() {
 void *tracedata::routine(void *arg) {
     auto *self = static_cast<tracedata *>(arg);
     while (true) {
-        if (self->need_update.load()) {
+        if (self->need_update()) {
             self->update_image();
         }
     }
@@ -121,14 +121,22 @@ QColor tracedata::pixel(float value) const {
 
 void tracedata::set_crossline(int crossline) {
     m_crossline = crossline;
-    this->need_update.store(true);
+    m_need_update.store(true);
 }
 
 void tracedata::set_traceid(int traceno) {
     m_traceno = traceno;
-    this->need_update.store(true);
+    m_need_update.store(true);
 }
 
 tracedata::~tracedata() {
     m_render_thread.join();
+}
+
+bool tracedata::need_update() {
+    return m_need_update.load();
+}
+
+void tracedata::set_need_update(bool upd) {
+    m_need_update.store(upd);
 }
