@@ -28,20 +28,22 @@ private:
     int m_current_layer = 0;
     tracedata m_data;
 
+    std::string m_dir_path;
 
-signals:
-    void data_loaded();
-
+    void on_open_file();
 
 public slots:
     void open_segy_file();
 
-    void on_open_file();
+    void run_emd();
+
 
     void refresh(bool update_settings);
 
     void set_traceno(int traceno);
 
     void set_crossline(int crossline);
+
+    void dir_name();
 };
 #endif    // MAINWINDOW_H

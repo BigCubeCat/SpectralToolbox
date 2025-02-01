@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_9">
     <item>
      <layout class="QHBoxLayout" name="mainLayout">
       <item>
@@ -148,41 +148,53 @@
           <item>
            <widget class="QTabWidget" name="tabWidget">
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab">
              <attribute name="title">
               <string>emd</string>
              </attribute>
-             <widget class="QWidget" name="widget" native="true">
+             <widget class="QWidget" name="verticalLayoutWidget_3">
               <property name="geometry">
                <rect>
-                <x>0</x>
-                <y>70</y>
-                <width>116</width>
-                <height>117</height>
+                <x>40</x>
+                <y>10</y>
+                <width>160</width>
+                <height>193</height>
                </rect>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_2">
+              <layout class="QVBoxLayout" name="tab1Layout">
                <item>
-                <widget class="QPushButton" name="emdRfile">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="emdGfile">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="emdBfile">
-                 <property name="text">
-                  <string/>
-                 </property>
+                <widget class="QWidget" name="widget" native="true">
+                 <layout class="QVBoxLayout" name="verticalLayout_2">
+                  <item>
+                   <widget class="QPushButton" name="dirBtn">
+                    <property name="text">
+                     <string>директория</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="verticalSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="runEMD">
+                    <property name="text">
+                     <string>запустить</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                </item>
               </layout>
@@ -196,13 +208,6 @@
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="runButton">
-         <property name="text">
-          <string>Запустить</string>
-         </property>
         </widget>
        </item>
       </layout>

@@ -4,8 +4,7 @@
 
 #include "../include/em_decomposer.hpp"
 
-#include <iostream>
-
+#include "datamodel.hpp"
 #include "omp.h"
 #include "segyreader.hpp"
 #include "segywriter.hpp"
@@ -88,7 +87,9 @@ void em_decomposer::decompose(
 #pragma omp critical(red)
             {
                 for (int j = 0; j < idxs.size(); ++j) {
-                    writer_red.write_traceheader(idxs[j], line_trace_headers[j]);
+                    writer_red.write_traceheader(
+                        idxs[j], line_trace_headers[j]
+                    );
                     writer_red.write_trace(idxs[j], red_line_traces[j]);
                 }
             }
@@ -96,7 +97,9 @@ void em_decomposer::decompose(
 #pragma omp critical(green)
             {
                 for (int j = 0; j < idxs.size(); ++j) {
-                    writer_green.write_traceheader(idxs[j], line_trace_headers[j]);
+                    writer_green.write_traceheader(
+                        idxs[j], line_trace_headers[j]
+                    );
                     writer_green.write_trace(idxs[j], green_line_traces[j]);
                 }
             }
@@ -104,7 +107,9 @@ void em_decomposer::decompose(
 #pragma omp critical(blue)
             {
                 for (int j = 0; j < idxs.size(); ++j) {
-                    writer_blue.write_traceheader(idxs[j], line_trace_headers[j]);
+                    writer_blue.write_traceheader(
+                        idxs[j], line_trace_headers[j]
+                    );
                     writer_blue.write_trace(idxs[j], blue_line_traces[j]);
                 }
             }

@@ -13,6 +13,8 @@ main_window::main_window(QWidget *parent)
     this->setWindowTitle("Spectral Toolbox");
 
     m_ui->renderLayout->addWidget(&m_data);
+    m_ui->tab->setLayout(m_ui->tab1Layout);
+    // m_ui->scrollArea->setWidget(m_ui->dirLabel);
 
     connect(
         m_ui->actionOpen_SEG_Y_file,
@@ -21,7 +23,6 @@ main_window::main_window(QWidget *parent)
         &main_window::open_segy_file
     );
 
-    connect(this, &main_window::data_loaded, this, &main_window::on_open_file);
     connect(
         m_ui->tracenoSpin,
         &QSpinBox::valueChanged,
@@ -34,17 +35,21 @@ main_window::main_window(QWidget *parent)
         this,
         &main_window::set_crossline
     );
+
+    connect(m_ui->dirBtn, &QPushButton::clicked, this, &main_window::dir_name);
+
+    connect(m_ui->runEMD, &QPushButton::clicked, this, &main_window::run_emd);
 }
 
 void main_window::open_segy_file() {
     QString file_name = QFileDialog::getOpenFileName(
-        this, "Выберите файл", "", "Все файлы (*.*)"
+        this, "Выберите файл", "", "SEG-Y (*.sgy)"
     );
 
     if (!file_name.isEmpty()) {
         m_filename = file_name.toStdString();
         datamodel::instance()->open_file(m_filename);
-        emit data_loaded();
+        on_open_file();
     }
     else {
         spdlog::error("filename is isEmpty");
@@ -87,6 +92,24 @@ void main_window::set_crossline(int crossline) {
 void main_window::on_open_file() {
     std::string res = "Spectral Toolbox [" + m_filename + "]";
     this->setWindowTitle(QString::fromStdString(res));
+}
+
+void main_window::dir_name() {
+    QString file_name = QFileDialog::getExistingDirectory(
+        this, "Выберите директорию для сохранения результатов"
+    );
+    if (!file_name.isEmpty()) {
+        // datamodel::instance()->set_rname(fileno.toStdString());
+        auto vector       = file_name.split(QString("/"));
+        const auto &label = vector.at(vector.size() - 1);
+        m_ui->dirBtn->setText(label);
+
+        datamodel::instance()->set_string("out", file_name.toStdString());
+    }
+}
+
+void main_window::run_emd() {
+    datamodel::instance()->start_calculation();
 }
 
 main_window::~main_window() {
