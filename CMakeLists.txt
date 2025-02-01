@@ -23,6 +23,7 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 qt_standard_project_setup()
 
 qt_add_executable(${PROJECT_NAME}
+
     WIN32 MACOSX_BUNDLE
     src/main.cpp
     src/widgets/mainwindow.cpp
@@ -44,15 +45,14 @@ qt_add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-PUBLIC
-    spdlog
-
-  common_lib
-  io_lib
-  model_lib
-PRIVATE
-  Qt::Core
-  Qt::Widgets
+        PUBLIC
+        spdlog
+        common_lib
+        io_lib
+        model_lib
+        PRIVATE
+        Qt::Core
+        Qt::Widgets
 )
 
 # Линковка со статической библиотекой
@@ -60,15 +60,15 @@ target_link_libraries(${PROJECT_NAME} PRIVATE common_lib io_lib emd_lib mp_lib)
 include(GNUInstallDirs)
 
 install(TARGETS ${PROJECT_NAME}
-    BUNDLE  DESTINATION .
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        BUNDLE DESTINATION .
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 qt_generate_deploy_app_script(
-    TARGET ${PROJECT_NAME}
-    OUTPUT_SCRIPT deploy_script
-    NO_UNSUPPORTED_PLATFORM_ERROR
+        TARGET ${PROJECT_NAME}
+        OUTPUT_SCRIPT deploy_script
+        NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
 
@@ -76,6 +76,6 @@ install(SCRIPT ${deploy_script})
 enable_testing()
 include(CTest)
 if (BUILD_TESTING)
-  add_subdirectory(test)
-endif(BUILD_TESTING)
+    add_subdirectory(test)
+endif (BUILD_TESTING)
 
