@@ -5,7 +5,7 @@
 #include "widgets/tracedata.hpp"
 
 
-struct routine_arg {
+struct thread_arg {
     tracedata *td;
     resultdata *rd;
     trace_choose *tc;
