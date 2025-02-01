@@ -1,24 +1,27 @@
-#ifndef TRACEDATA_HPP
-#define TRACEDATA_HPP
+#ifndef RESULT_DATA_HPP
+#define RESULT_DATA_HPP
 
 #include <QImage>
 #include <QLabel>
 #include <QWidget>
-#include <thread>
 
-class tracedata : public QWidget {
+struct rgb_t {
+    float r, g, b;
+};
+
+class resultdata : public QWidget {
 private:
     QLabel *m_no_data_label;
     QImage m_image;
-    int m_traceno       = 0;
     int32_t m_crossline = -1;
-    float m_max_value   = 0;
+    float m_max_red     = 0;
+    float m_max_green   = 0;
+    float m_max_blue    = 0;
 
-    std::vector<std::vector<std::pair<float, int32_t>>> m_image_data;
-    std::thread m_render_thread;
+    std::vector<std::vector<rgb_t>> m_image_data;
 
 
-    [[nodiscard]] QColor pixel(float value) const;
+    QColor pixel(rgb_t color);
     static void *routine(void *arg);
 
     void render_image();
@@ -27,15 +30,13 @@ private:
     std::atomic<bool> m_need_update;
 
 public:
-    tracedata(QWidget *parent = nullptr);
+    resultdata(QWidget *parent = nullptr);
 
     bool need_update();
 
     void set_need_update(bool upd);
 
-    ~tracedata() override;
-signals:
-    void done();
+    ~resultdata() override;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -43,7 +44,6 @@ protected:
 
 public slots:
     void set_crossline(int crossline);
-    void set_traceid(int traceno);
 };
 
 #endif

@@ -1,0 +1,133 @@
+#include "../../include/widgets/resultdata.hpp"
+
+#include <QImage>
+#include <QPainter>
+#include <algorithm>
+
+#include <qimage.h>
+#include <qminmax.h>
+#include <unistd.h>
+
+#include <spdlog/spdlog.h>
+
+#include "datamodel.hpp"
+
+const int CELL_SIZE = 1;
+
+resultdata::resultdata(QWidget *parent)
+    : QWidget(parent), m_no_data_label(new QLabel(this)) {
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_image = QImage(0, 0, QImage::Format_RGB32);
+    m_no_data_label->setText("Результатов пока нет");
+}
+
+void resultdata::paintEvent(QPaintEvent *event) {
+    Q_UNUSED(event);
+    QPainter painter(this);
+    painter.drawImage(rect(), m_image, m_image.rect());
+}
+
+void resultdata::resizeEvent(QResizeEvent *event) {
+    Q_UNUSED(event);
+}
+
+void resultdata::update_image() {
+    if (!datamodel::instance()->calculation_is_done.load()) {
+        return;
+    }
+
+    auto *data         = datamodel::instance();
+    auto *red_reader   = data->red_reader();
+    auto *green_reader = data->green_reader();
+    auto *blue_reader  = data->blue_reader();
+    if (!red_reader || !green_reader || !blue_reader) {
+        return;
+    }
+
+    const int rows = red_reader->max_inline() - red_reader->min_inline();
+    if (rows == 0) {
+        data->unlock_reader();
+        return;
+    }
+
+    if (m_crossline == -1) {
+        m_crossline = red_reader->min_crossline();
+    }
+
+    auto red_traces   = red_reader->get_crossline_layer(m_crossline);
+    auto green_traces = green_reader->get_crossline_layer(m_crossline);
+    auto blue_traces  = blue_reader->get_crossline_layer(m_crossline);
+
+    auto size = red_traces.size();
+    if (size == 0) {
+        data->unlock_reader();
+        return;
+    }
+
+    const int cols = static_cast<int>(red_reader->trace(red_traces[0]).size());
+
+    m_max_red   = 0;
+    m_max_green = 0;
+    m_max_blue  = 0;
+
+    m_image_data.resize(size);
+    for (int i = 0; i < size; ++i) {
+        auto red_tr   = red_reader->trace(i);
+        auto green_tr = green_reader->trace(i);
+        auto blue_tr  = blue_reader->trace(i);
+
+        auto row = std::vector<rgb_t>(static_cast<long>(cols));
+#pragma omp parallel for
+        for (int j = 0; j < cols - 1; ++j) {
+            auto x = (red_reader->trace_inline(i) - red_reader->min_inline());
+            row[j] = { .r = red_tr[j], .g = green_tr[j], .b = blue_tr[j] };
+            m_max_red   = std::max(m_max_red, red_tr[j]);
+            m_max_green = std::max(m_max_green, green_tr[j]);
+            m_max_blue  = std::max(m_max_blue, blue_tr[j]);
+        }
+        m_image_data[i] = row;
+    }
+    data->unlock_reader();
+    render_image();
+}
+
+void resultdata::render_image() {
+    if (!datamodel::instance()->calculation_is_done.load()) {
+        return;
+    }
+    auto rows = static_cast<int>(m_image_data.size());
+    if (rows == 0) {
+        return;
+    }
+    auto cols = static_cast<int>(m_image_data[0].size());
+
+    m_image = QImage(rows, cols, QImage::Format_RGB32);
+    m_image.fill(QColor(0, 0, 0));
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            m_image.setPixelColor(i, j, pixel(m_image_data[i][j]));
+        }
+    }
+    update();
+}
+
+QColor resultdata::pixel(rgb_t value) {
+    return { static_cast<int>(qBound(0.0f, value.r, 1.0f) * 255),
+             static_cast<int>(qBound(0.0f, value.g, 1.0f) * 255),
+             static_cast<int>(qBound(0.0f, value.b, 1.0f) * 255) };
+};
+
+void resultdata::set_crossline(int crossline) {
+    m_crossline = crossline;
+    update_image();
+}
+
+bool resultdata::need_update() {
+    return m_need_update.load();
+}
+
+void resultdata::set_need_update(bool upd) {
+    update_image();
+}
+
+resultdata::~resultdata() { }

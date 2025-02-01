@@ -37,18 +37,11 @@ void em_decomposer::decompose(
     // открываем файл на чтение и 3 файла на запись
     segy_reader reader { input_file };
     char *binheader = reader.binheader();
-    int sub_start   = input_file.rfind('/') + 1;
-    int sub_end     = input_file.rfind('.');
-    std::string output_filename =
-        input_file.substr(sub_start, sub_end - sub_start);
-    std::string red_file   = output_dir + "/" + output_filename + "_r.sgy";
-    std::string green_file = output_dir + "/" + output_filename + "_g.sgy";
-    std::string blue_file  = output_dir + "/" + output_filename + "_b.sgy";
-    segy_writer writer_red { red_file };
+    segy_writer writer_red { m_red };
     writer_red.write_binheader(binheader);
-    segy_writer writer_green { green_file };
+    segy_writer writer_green { m_green };
     writer_green.write_binheader(binheader);
-    segy_writer writer_blue { blue_file };
+    segy_writer writer_blue { m_blue };
     writer_blue.write_binheader(binheader);
 
     // берем границы кросслайна для цикла
@@ -56,6 +49,7 @@ void em_decomposer::decompose(
     int max_crossline = reader.max_crossline();
 
     std::vector<segy_reader> readers {};
+    readers.reserve(cnt_threads);
     for (int i = 0; i < cnt_threads; i++) {
         readers.emplace_back(input_file);
     }
@@ -115,4 +109,12 @@ void em_decomposer::decompose(
             }
         }
     }
+}
+
+void em_decomposer::setup(
+    const std::string &red, const std::string &green, const std::string &blue
+) {
+    m_red   = red;
+    m_green = green;
+    m_blue  = blue;
 }

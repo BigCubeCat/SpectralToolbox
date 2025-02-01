@@ -36,6 +36,10 @@ void tracedata::resizeEvent(QResizeEvent *event) {
 void tracedata::update_image() {
     m_need_update.store(false);
 
+    if (datamodel::instance()->calculation_is_done.load()) {
+        emit done();
+    }
+
     auto *data   = datamodel::instance();
     auto *reader = data->reader();
     if (!reader) {
@@ -108,6 +112,7 @@ void tracedata::render_image() {
 void *tracedata::routine(void *arg) {
     auto *self = static_cast<tracedata *>(arg);
     while (true) {
+
         if (self->need_update()) {
             self->update_image();
         }
@@ -136,6 +141,8 @@ tracedata::~tracedata() {
 bool tracedata::need_update() {
     return m_need_update.load();
 }
+
+void tracedata::done() { }
 
 void tracedata::set_need_update(bool upd) {
     m_need_update.store(upd);

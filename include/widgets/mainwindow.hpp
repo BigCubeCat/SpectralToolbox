@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 
+#include "resultdata.hpp"
 #include "tracedata.hpp"
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,7 +26,9 @@ private:
 
     int m_current_trace = 0;
     int m_current_layer = 0;
+
     tracedata m_data;
+    resultdata m_result;
 
     std::string m_dir_path;
 
@@ -45,5 +47,7 @@ public slots:
     void set_crossline(int crossline);
 
     void dir_name();
+
+    void done();
 };
 #endif    // MAINWINDOW_H

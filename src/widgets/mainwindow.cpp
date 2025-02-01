@@ -13,6 +13,8 @@ main_window::main_window(QWidget *parent)
     this->setWindowTitle("Spectral Toolbox");
 
     m_ui->renderLayout->addWidget(&m_data);
+    m_ui->renderLayout1->addWidget(&m_result);
+
     m_ui->tab->setLayout(m_ui->tab1Layout);
 
     m_ui->tabInput->setLayout(m_ui->renderLayout);
@@ -45,7 +47,7 @@ main_window::main_window(QWidget *parent)
 
 void main_window::open_segy_file() {
     QString file_name = QFileDialog::getOpenFileName(
-        this, "Выберите файл", "", "SEG-Y (*.sgy)"
+        this, "Выберите файл", "", "SEG-Y (*.sgy *.segy)"
     );
 
     if (!file_name.isEmpty()) {
@@ -88,6 +90,7 @@ void main_window::set_traceno(int traceno) {
 void main_window::set_crossline(int crossline) {
     m_current_layer = crossline;
     m_data.set_crossline(crossline);
+    m_result.set_crossline(crossline);
     refresh(false);
 }
 
@@ -112,6 +115,10 @@ void main_window::dir_name() {
 
 void main_window::run_emd() {
     datamodel::instance()->start_calculation();
+}
+
+void main_window::done() {
+    m_result.set_need_update(true);
 }
 
 main_window::~main_window() {
