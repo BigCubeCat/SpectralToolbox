@@ -54,7 +54,6 @@ void main_window::open_segy_file() {
 
 void main_window::refresh(bool update_settings) {
     m_data.need_update.store(true);
-    m_data.render_image();
     if (!update_settings)
         return;
     auto *context = datamodel::instance();

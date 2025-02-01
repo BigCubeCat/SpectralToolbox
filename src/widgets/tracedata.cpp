@@ -19,7 +19,6 @@ tracedata::tracedata(QWidget *parent)
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_image = QImage(0, 0, QImage::Format_RGB32);
     m_no_data_label->setText("Загрузите файл с данными");
-    this->resize(200, 200);
 
     m_render_thread = std::thread(tracedata::routine, this);
 }
@@ -91,6 +90,7 @@ void tracedata::render_image() {
     auto cols = static_cast<int>(m_image_data[0].size());
 
     m_image = QImage(rows, cols, QImage::Format_RGB32);
+    m_image.fill(QColor(0, 0, 0));
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
             auto p = pixel(m_image_data[i][j].first);
@@ -102,10 +102,7 @@ void tracedata::render_image() {
             m_image.setPixelColor(i, j, p);
         }
     }
-    // auto selected_color = QColor(255, 128, 0);
-    // for (const auto &p : current_trace_point) {
-    //     m_image.setPixelColor(p.first, p.second, selected_color);
-    // }
+    update();
 }
 
 void *tracedata::routine(void *arg) {
