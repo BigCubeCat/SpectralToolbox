@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 
+#include "../routine.hpp"
+#include "resultdata.hpp"
 #include "tracedata.hpp"
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,7 +27,13 @@ private:
 
     int m_current_trace = 0;
     int m_current_layer = 0;
+
     tracedata m_data;
+    resultdata m_result;
+
+    routine_arg *m_arg;
+
+    std::thread m_thread;
 
     std::string m_dir_path;
 
@@ -34,6 +41,8 @@ private:
 
 public slots:
     void open_segy_file();
+
+    void open_result_file();
 
     void run_emd();
 

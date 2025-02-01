@@ -1,10 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <thread>
 #include <utility>
 
-#include "em_decomposer.hpp"
 #include "proc_config.hpp"
 #include "reader.hpp"
 
@@ -19,6 +17,11 @@ private:
     int m_progress = 0;
     std::mutex m_reader_mutex;
     std::shared_ptr<reader_iface> m_data_reader;
+
+    std::shared_ptr<reader_iface> m_red_reader;
+    std::shared_ptr<reader_iface> m_green_reader;
+    std::shared_ptr<reader_iface> m_blue_reader;
+
     proc_config m_config;
 
     datamodel() = default;
@@ -41,7 +44,17 @@ public:
     /// открыть новый файл с данными
     void open_file(const std::string &filename);
 
+    void open_result(
+        const std::string &red,
+        const std::string &green,
+        const std::string &blue
+    );
+
     reader_iface *reader();
+
+    reader_iface *red_reader();
+    reader_iface *green_reader();
+    reader_iface *blue_reader();
 
     void unlock_reader();
 

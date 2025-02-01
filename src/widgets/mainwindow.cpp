@@ -4,23 +4,40 @@
 
 #include <spdlog/spdlog.h>
 
+#include "../../include/routine.hpp"
 #include "datamodel.hpp"
 #include "ui_mainwindow.h"
 
+
 main_window::main_window(QWidget *parent)
-    : QMainWindow(parent), m_ui(new Ui::MainWindow) {
+    : QMainWindow(parent), m_ui(new Ui::MainWindow), m_arg(new routine_arg) {
     m_ui->setupUi(this);
     this->setWindowTitle("Spectral Toolbox");
 
+    m_arg->running = true;
+    m_arg->td      = &m_data;
+    m_arg->rd      = &m_result;
+
     m_ui->renderLayout->addWidget(&m_data);
+    m_ui->renderLayout1->addWidget(&m_result);
+
     m_ui->tab->setLayout(m_ui->tab1Layout);
-    // m_ui->scrollArea->setWidget(m_ui->dirLabel);
+
+    m_ui->tabInput->setLayout(m_ui->renderLayout);
+    m_ui->tabOutput->setLayout(m_ui->renderLayout1);
 
     connect(
         m_ui->actionOpen_SEG_Y_file,
         &QAction::triggered,
         this,
         &main_window::open_segy_file
+    );
+
+    connect(
+        m_ui->actionOpen_Result,
+        &QAction::triggered,
+        this,
+        &main_window::open_result_file
     );
 
     connect(
@@ -39,11 +56,13 @@ main_window::main_window(QWidget *parent)
     connect(m_ui->dirBtn, &QPushButton::clicked, this, &main_window::dir_name);
 
     connect(m_ui->runEMD, &QPushButton::clicked, this, &main_window::run_emd);
+
+    m_thread = std::thread(routine, m_arg);
 }
 
 void main_window::open_segy_file() {
     QString file_name = QFileDialog::getOpenFileName(
-        this, "Выберите файл", "", "SEG-Y (*.sgy)"
+        this, "Выберите файл", "", "SEG-Y (*.sgy *.segy)"
     );
 
     if (!file_name.isEmpty()) {
@@ -58,7 +77,7 @@ void main_window::open_segy_file() {
 }
 
 void main_window::refresh(bool update_settings) {
-    m_data.need_update.store(true);
+    m_data.set_need_update(true);
     if (!update_settings)
         return;
     auto *context = datamodel::instance();
@@ -86,6 +105,7 @@ void main_window::set_traceno(int traceno) {
 void main_window::set_crossline(int crossline) {
     m_current_layer = crossline;
     m_data.set_crossline(crossline);
+    m_result.set_crossline(crossline);
     refresh(false);
 }
 
@@ -108,10 +128,39 @@ void main_window::dir_name() {
     }
 }
 
+void main_window::open_result_file() {
+    auto red_filename = QFileDialog::getOpenFileName(
+        this, "Выберите красный файл", "", "SEG-Y (*.sgy *.segy)"
+    );
+    auto green_filename = QFileDialog::getOpenFileName(
+        this, "Выберите зеленый файл", "", "SEG-Y (*.sgy *.segy)"
+    );
+    auto blue_filename = QFileDialog::getOpenFileName(
+        this, "Выберите синий файл", "", "SEG-Y (*.sgy *.segy)"
+    );
+
+    if (!red_filename.isEmpty() && !green_filename.isEmpty()
+        && !blue_filename.isEmpty()) {
+        datamodel::instance()->open_result(
+            red_filename.toStdString(),
+            green_filename.toStdString(),
+            blue_filename.toStdString()
+        );
+        on_open_file();
+    }
+    else {
+        spdlog::error("filename is isEmpty");
+    }
+}
+
 void main_window::run_emd() {
     datamodel::instance()->start_calculation();
 }
 
 main_window::~main_window() {
+    m_arg->running = false;
+    sleep(1);
+    m_thread.join();
     delete m_ui;
+    delete m_arg;
 }

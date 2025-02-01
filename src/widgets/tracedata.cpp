@@ -19,8 +19,6 @@ tracedata::tracedata(QWidget *parent)
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_image = QImage(0, 0, QImage::Format_RGB32);
     m_no_data_label->setText("Загрузите файл с данными");
-
-    m_render_thread = std::thread(tracedata::routine, this);
 }
 
 void tracedata::paintEvent(QPaintEvent *event) {
@@ -34,7 +32,7 @@ void tracedata::resizeEvent(QResizeEvent *event) {
 }
 
 void tracedata::update_image() {
-    this->need_update.store(false);
+    m_need_update.store(false);
 
     auto *data   = datamodel::instance();
     auto *reader = data->reader();
@@ -105,15 +103,6 @@ void tracedata::render_image() {
     update();
 }
 
-void *tracedata::routine(void *arg) {
-    auto *self = static_cast<tracedata *>(arg);
-    while (true) {
-        if (self->need_update.load()) {
-            self->update_image();
-        }
-    }
-}
-
 QColor tracedata::pixel(float value) const {
     auto v = static_cast<int>(qBound(0.0f, value / m_max_value, 1.0f) * 255);
     return { v, v, v };
@@ -121,14 +110,20 @@ QColor tracedata::pixel(float value) const {
 
 void tracedata::set_crossline(int crossline) {
     m_crossline = crossline;
-    this->need_update.store(true);
+    m_need_update.store(true);
 }
 
 void tracedata::set_traceid(int traceno) {
     m_traceno = traceno;
-    this->need_update.store(true);
+    m_need_update.store(true);
 }
 
-tracedata::~tracedata() {
-    m_render_thread.join();
+tracedata::~tracedata() { }
+
+bool tracedata::need_update() {
+    return m_need_update.load();
+}
+
+void tracedata::set_need_update(bool upd) {
+    m_need_update.store(upd);
 }

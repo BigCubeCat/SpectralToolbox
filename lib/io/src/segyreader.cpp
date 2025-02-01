@@ -73,10 +73,6 @@ segy_reader::segy_reader(std::string filename)
             m_layers[trace_crossline] = vec;
         }
     }
-    // std::ranges::sort(m_trace_no, [](auto &left, auto &right) {
-    //     return left.second < right.second;
-    // });
-    spdlog::info("here");
 }
 
 char *segy_reader::binheader() {

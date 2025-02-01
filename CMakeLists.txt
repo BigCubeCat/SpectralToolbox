@@ -33,6 +33,11 @@ qt_add_executable(${PROJECT_NAME}
     src/widgets/tracedata.cpp
     include/widgets/tracedata.hpp
 
+    include/widgets/resultdata.hpp
+    src/widgets/resultdata.cpp
+
+    include/routine.hpp
+    src/routine.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
