@@ -207,6 +207,7 @@ void main_window::open_result_file() {
         green_filename.toStdString(),
         blue_filename.toStdString()
     );
+    m_result.find_min_and_max();
     on_open_file();
 }
 

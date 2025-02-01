@@ -18,9 +18,9 @@ private:
 
     float m_max_value = 0;
     float m_min_value = INT_MAX;
+    float m_atomic_size;
 
     std::vector<std::vector<rgb_t>> m_image_data;
-
 
     QColor pixel(rgb_t color);
     static void *routine(void *arg);
@@ -43,6 +43,8 @@ public:
     }
 
     ~resultdata() override;
+
+    void find_min_and_max();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
