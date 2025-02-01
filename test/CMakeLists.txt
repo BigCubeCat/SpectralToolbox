@@ -8,7 +8,8 @@ SET(CMAKE_CXX_FLAGS "-g -Ofast -Wall -fprofile-arcs -ftest-coverage")
 SET(CMAKE_C_FLAGS "-g -Ofast -Wall -W -fprofile-arcs -ftest-coverage")
 SET(CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
 
-add_executable(${PROJECT_NAME} ${TEST_SOURCES})
+add_executable(${PROJECT_NAME} ${TEST_SOURCES}
+        test_idle.cpp)
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 
