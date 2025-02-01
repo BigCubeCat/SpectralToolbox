@@ -29,11 +29,9 @@ qt_add_executable(${PROJECT_NAME}
     include/widgets/mainwindow.hpp
     include/widgets/procedure_config_widget.hpp
     src/widgets/mainwindow.ui
-    include/widgets/file_widget.hpp
-    src/widgets/file_widget.ui
-    src/widgets/file_widget.cpp
     src/widgets/tracedata.cpp
     include/widgets/tracedata.hpp
+
 )
 
 target_link_libraries(${PROJECT_NAME}

@@ -14,9 +14,100 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout_9">
     <item>
-     <layout class="QVBoxLayout" name="mainLayout"/>
+     <layout class="QHBoxLayout" name="mainLayout">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QWidget" name="renderWidget" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QVBoxLayout" name="renderLayout"/>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="horizontalWidget_2" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>crossline</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="crosslineSpin"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>traceno</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="tracenoSpin"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="QWidget" name="previewLayout_2" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QHBoxLayout" name="previewLayout"/>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Сбросить</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -34,7 +125,6 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen_SEG_Y_file"/>
-    <addaction name="actionOpen_3_files"/>
     <addaction name="separator"/>
     <addaction name="actionSave_as"/>
    </widget>
@@ -56,26 +146,68 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
-           <widget class="QComboBox" name="methodBox"/>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="paramLayout"/>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton">
-            <property name="text">
-             <string>проверить</string>
+           <widget class="QTabWidget" name="tabWidget">
+            <property name="currentIndex">
+             <number>1</number>
             </property>
+            <widget class="QWidget" name="tab">
+             <attribute name="title">
+              <string>emd</string>
+             </attribute>
+             <widget class="QWidget" name="verticalLayoutWidget_3">
+              <property name="geometry">
+               <rect>
+                <x>40</x>
+                <y>10</y>
+                <width>160</width>
+                <height>193</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="tab1Layout">
+               <item>
+                <widget class="QWidget" name="widget" native="true">
+                 <layout class="QVBoxLayout" name="verticalLayout_2">
+                  <item>
+                   <widget class="QPushButton" name="dirBtn">
+                    <property name="text">
+                     <string>директория</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="verticalSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="runEMD">
+                    <property name="text">
+                     <string>запустить</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="tab_2">
+             <attribute name="title">
+              <string>mp</string>
+             </attribute>
+            </widget>
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="runButton">
-         <property name="text">
-          <string>Запустить</string>
-         </property>
         </widget>
        </item>
       </layout>
