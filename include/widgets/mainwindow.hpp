@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 
-#include "file_widget.hpp"
-#include "procedure_config_widget.hpp"
+#include "tracedata.hpp"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,21 +17,17 @@ class main_window : public QMainWindow {
 
 public:
     main_window(QWidget *parent = nullptr);
-    main_window(const main_window &)            = delete;
-    main_window(main_window &&)                 = delete;
-    main_window &operator=(const main_window &) = delete;
-    main_window &operator=(main_window &&)      = delete;
-    main_window(
-        Ui::MainWindow *m_ui,
-        std::shared_ptr<procedure_config_widget> m_param_widget
-    )
-        : m_ui(m_ui), m_param_widget(std::move(m_param_widget)) { }
     ~main_window() override;
 
 private:
     Ui::MainWindow *m_ui;
-    std::shared_ptr<procedure_config_widget> m_param_widget;
-    std::shared_ptr<file_widget> m_file_widget;
+
+    std::string m_filename;
+
+    int m_current_trace = 0;
+    int m_current_layer = 0;
+    tracedata m_data;
+
 
 signals:
     void data_loaded();
@@ -39,5 +35,13 @@ signals:
 
 public slots:
     void open_segy_file();
+
+    void on_open_file();
+
+    void refresh(bool update_settings);
+
+    void set_traceno(int traceno);
+
+    void set_crossline(int crossline);
 };
 #endif    // MAINWINDOW_H

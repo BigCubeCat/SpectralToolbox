@@ -15,7 +15,9 @@ void datamodel::open_file(const std::string &filename) {
     spdlog::info("filename={}", filename);
     m_reader_mutex.lock();
     // TODO: сделать фабрику для других типов
+    spdlog::info("init reader");
     m_data_reader = std::make_shared<segy_reader>(filename);
+    spdlog::info("reader created");
     m_reader_mutex.unlock();
 }
 

@@ -19,13 +19,13 @@ private:
 
 
     [[nodiscard]] QColor pixel(float value) const;
-    void render_image();
     static void *routine(void *arg);
 
 public:
     tracedata(QWidget *parent = nullptr);
 
     void update_image();
+    void render_image();
 
     std::atomic<bool> need_update;
 
