@@ -11,6 +11,7 @@ struct rgb_t {
 
 class resultdata : public QWidget {
 private:
+    std::atomic<bool> m_need_update;
     QLabel *m_no_data_label;
     QImage m_image;
     int32_t m_crossline = -1;
@@ -31,6 +32,13 @@ public:
     resultdata(QWidget *parent = nullptr);
 
     void update_image();
+
+    void set_need_update(bool need) {
+        m_need_update.store(need);
+    }
+    bool need_update() {
+        return m_need_update.load();
+    }
 
     ~resultdata() override;
 

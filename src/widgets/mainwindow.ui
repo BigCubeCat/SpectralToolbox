@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1142</width>
+    <width>1118</width>
     <height>648</height>
    </rect>
   </property>
@@ -22,22 +22,26 @@
         <item>
          <widget class="QTabWidget" name="tabWidget_2">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabInput">
            <attribute name="title">
             <string>входные данные</string>
            </attribute>
-           <widget class="QWidget" name="verticalLayoutWidget_6">
+           <widget class="QWidget" name="horizontalLayoutWidget_2">
             <property name="geometry">
              <rect>
-              <x>280</x>
-              <y>170</y>
-              <width>160</width>
-              <height>80</height>
+              <x>160</x>
+              <y>100</y>
+              <width>481</width>
+              <height>221</height>
              </rect>
             </property>
-            <layout class="QVBoxLayout" name="renderLayout"/>
+            <layout class="QHBoxLayout" name="renderLayout">
+             <item>
+              <layout class="QVBoxLayout" name="prevLayout"/>
+             </item>
+            </layout>
            </widget>
           </widget>
           <widget class="QWidget" name="tabOutput">
@@ -67,6 +71,24 @@
            </sizepolicy>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QPushButton" name="resetButton">
+               <property name="text">
+                <string>Сбросить</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="previewButton">
+               <property name="text">
+                <string>Предпросмотр</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
            <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
@@ -113,28 +135,6 @@
         </item>
        </layout>
       </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
-        <item>
-         <widget class="QWidget" name="previewLayout_2" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <layout class="QHBoxLayout" name="previewLayout"/>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>Сбросить</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
      </layout>
     </item>
    </layout>
@@ -144,7 +144,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1142</width>
+     <width>1118</width>
      <height>26</height>
     </rect>
    </property>
@@ -194,36 +194,23 @@
               </property>
               <layout class="QVBoxLayout" name="tab1Layout">
                <item>
-                <widget class="QWidget" name="widget" native="true">
-                 <layout class="QVBoxLayout" name="verticalLayout_2">
-                  <item>
-                   <widget class="QPushButton" name="dirBtn">
-                    <property name="text">
-                     <string>директория</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="verticalSpacer">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>20</width>
-                      <height>40</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="runEMD">
-                    <property name="text">
-                     <string>запустить</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
+                <spacer name="verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="runEMD">
+                 <property name="text">
+                  <string>запустить</string>
+                 </property>
                 </widget>
                </item>
               </layout>
@@ -233,7 +220,135 @@
              <attribute name="title">
               <string>mp</string>
              </attribute>
+             <widget class="QWidget" name="verticalLayoutWidget_8">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>10</y>
+                <width>286</width>
+                <height>411</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="mpLayout">
+               <item>
+                <spacer name="verticalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <layout class="QFormLayout" name="formLayout">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_3">
+                   <property name="text">
+                    <string>красный</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="redSpinBox">
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_4">
+                   <property name="text">
+                    <string>зеленый</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QSpinBox" name="greenSpinBox">
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_5">
+                   <property name="text">
+                    <string>синий</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QSpinBox" name="blueSpinBox">
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_6">
+                   <property name="text">
+                    <string>время шага, s</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="label_7">
+                   <property name="text">
+                    <string>макс. амплитуда</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QDoubleSpinBox" name="stepTimeS">
+                   <property name="decimals">
+                    <number>4</number>
+                   </property>
+                   <property name="singleStep">
+                    <double>0.001000000000000</double>
+                   </property>
+                   <property name="value">
+                    <double>0.002000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QDoubleSpinBox" name="maxAmplitude">
+                   <property name="decimals">
+                    <number>4</number>
+                   </property>
+                   <property name="minimum">
+                    <double>0.010000000000000</double>
+                   </property>
+                   <property name="singleStep">
+                    <double>0.010000000000000</double>
+                   </property>
+                   <property name="value">
+                    <double>0.050000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QPushButton" name="runMP">
+                 <property name="text">
+                  <string>запустить</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="dirBtn">
+            <property name="text">
+             <string>директория</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -247,6 +362,9 @@
   <action name="actionOpen_SEG_Y_file">
    <property name="text">
     <string>Open SEG-Y file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionOpen_3_files">
@@ -262,6 +380,9 @@
   <action name="actionOpen_Result">
    <property name="text">
     <string>Open Result</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
    </property>
   </action>
  </widget>
