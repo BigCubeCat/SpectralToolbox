@@ -9,14 +9,17 @@
 #include "segyreader.hpp"
 #include "segywriter.hpp"
 
-mp_decomposer::mp_decomposer(float step_time_s, float max_amplitude) : m_step_time_s(m_step_time_s), m_max_amplitude(max_amplitude) {};
+mp_decomposer::mp_decomposer(float step_time_s, float max_amplitude)
+    : m_step_time_s(m_step_time_s), m_max_amplitude(max_amplitude) { };
 
 
 std::vector<float_trace>
 mp_decomposer::examine(const std::string &path, long index) {
     segy_reader reader { path };
     float_trace trace = reader.trace(index);
-    return m_decomposer.decompose_signal(trace, trace.size(), m_step_time_s, m_max_amplitude);
+    return m_decomposer.decompose_signal(
+        trace, trace.size(), m_step_time_s, m_max_amplitude
+    );
 }
 
 
@@ -27,12 +30,12 @@ void mp_decomposer::decompose(
     int green,
     int blue
 ) {
-    int cnt_threads = 4;
+    int cnt_threads = 16;
     // открываем файл на чтение и 3 файла на запись
     segy_reader reader { input_file };
     char *binheader = reader.binheader();
-    int sub_start = input_file.rfind('/') + 1;
-    int sub_end   = input_file.rfind('.');
+    int sub_start   = input_file.rfind('/') + 1;
+    int sub_end     = input_file.rfind('.');
     std::string output_filename =
         input_file.substr(sub_start, sub_end - sub_start);
     std::string red_file   = output_dir + "/" + output_filename + "_r.sgy";
@@ -54,31 +57,63 @@ void mp_decomposer::decompose(
         readers.emplace_back(input_file);
     }
 
-    //std::cout << "I am alive!\n";
-
-//#pragma omp parallel for num_threads(cnt_threads)
     for (int i = min_crossline; i <= max_crossline; ++i) {
+
         // берем индексы разреза
-        std::vector<int> idxs =
-            readers[omp_get_thread_num()].get_crossline_layer(i);
+        std::vector<int> idxs = reader.get_crossline_layer(i);
 
+        std::cout << i << " " << idxs.size() << std::endl;
+
+        std::vector<float_trace> red_line_traces { idxs.size() };
+        std::vector<float_trace> blue_line_traces { idxs.size() };
+        std::vector<float_trace> green_line_traces { idxs.size() };
+        std::vector<std::vector<char>> line_trace_headers { idxs.size() };
         // для каждого разреза делаем декомпозицию
-        for (auto &j : idxs) {
-            std::vector<char> trace_header = readers[omp_get_thread_num()].traceheader(j);
-            float_trace trace = readers[omp_get_thread_num()].trace(j);
+#pragma omp parallel for schedule(dynamic) proc_bind(spread) num_threads(cnt_threads)
+        for (int j = 0; j < idxs.size(); ++j) {
+            line_trace_headers[j] =
+                readers[omp_get_thread_num()].traceheader(idxs[j]);
+            float_trace trace = readers[omp_get_thread_num()].trace(idxs[j]);
+            std::vector<float_trace> results = m_decomposer.decompose_signal(
+                trace, trace.size(), m_step_time_s, m_max_amplitude
+            );
+            red_line_traces[j]   = results[red];
+            green_line_traces[j] = results[green];
+            blue_line_traces[j]  = results[blue];
+        }
 
-            std::vector<float_trace> full_spectrum = m_decomposer.decompose_signal(trace, trace.size(), m_step_time_s, m_max_amplitude);
+        // сохраняем в файлы
+#pragma omp parallel proc_bind(spread) num_threads(3)
+        {
+#pragma omp critical(red)
+            {
+                for (int j = 0; j < idxs.size(); ++j) {
+                    writer_red.write_traceheader(
+                        idxs[j], line_trace_headers[j]
+                    );
+                    writer_red.write_trace(idxs[j], red_line_traces[j]);
+                }
+            }
 
-            // сохраняем в файл
-//#pragma omp critical(red)
-            writer_red.write_traceheader(j,trace_header);
-            writer_red.write_trace(j, full_spectrum[red]);
-//#pragma omp critical(green)
-            writer_green.write_traceheader(j,trace_header);
-            writer_green.write_trace(j, full_spectrum[green]);
-//#pragma omp critical(blue)
-            writer_blue.write_traceheader(j,trace_header);
-            writer_blue.write_trace(j, full_spectrum[blue]);
+#pragma omp critical(green)
+            {
+                for (int j = 0; j < idxs.size(); ++j) {
+                    writer_green.write_traceheader(
+                        idxs[j], line_trace_headers[j]
+                    );
+                    writer_green.write_trace(idxs[j], green_line_traces[j]);
+                }
+            }
+
+#pragma omp critical(blue)
+            {
+                for (int j = 0; j < idxs.size(); ++j) {
+                    writer_blue.write_traceheader(
+                        idxs[j], line_trace_headers[j]
+                    );
+                    writer_blue.write_trace(idxs[j], blue_line_traces[j]);
+                }
+            }
         }
     }
 }

@@ -68,21 +68,22 @@ template<typename T>
 std::vector<Eigen::Vector<T, Eigen::Dynamic>> matching_pursuit<T>::decompose_signal(matching_pursuit<T>::trace gather, int trace_size, T step_time_s, T max_amplitude){
 
     std::vector<std::pair<int, int>> S;
-    matching_pursuit<T>::matrix dict = get_dict(70, step_time_s);
+    matching_pursuit<T>::matrix dict = get_dict(100, step_time_s);
     matching_pursuit<T>::trace r(trace_size);
     matching_pursuit<T>::matrix correlate_matrix;
     int id_max_i, id_max_j;
     r = gather / gather.cwiseAbs().maxCoeff(&id_max_i);
-
-    while(1) {
+    for (int i = 0; i < 20; ++i){
         correlate_matrix = calc_correlate_matrix(r, dict);
         correlate_matrix.cwiseAbs().maxCoeff(&id_max_i, &id_max_j);
         float amp = correlate_matrix(id_max_i, id_max_j);
-        if ((r.norm() < 1) || (std::abs(amp) < max_amplitude)){
+
+        S.push_back(std::pair{id_max_i, id_max_j + 1});
+        trace axis =  get_axis(dict, trace_size, id_max_i, id_max_j);
+        r = r - amp * axis;
+        if ((r.norm() < 0.1)){
             break;
         }
-        S.push_back(std::pair{id_max_i, id_max_j + 1});
-        r = r - amp * get_axis(dict, trace_size, id_max_i, id_max_j + 1);
     }
 
     std::vector<matching_pursuit<T>::trace> spectrum;
