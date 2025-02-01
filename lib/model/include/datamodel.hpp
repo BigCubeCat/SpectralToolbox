@@ -5,7 +5,10 @@
 
 #include "proc_config.hpp"
 #include "reader.hpp"
+#include "routine_arg.hpp"
 #include "trace.hpp"
+
+enum e_decomposer { EMD, MP, IDLE };
 
 /*!
  * \brief Объект, хранящий все данные и являющийся промежуточным звеном между
@@ -28,6 +31,8 @@ private:
 
     proc_config m_config;
 
+    routine_arg m_arg {};
+
     datamodel() = default;
 
 public:
@@ -43,7 +48,7 @@ public:
         return m_data_reader != nullptr;
     }
 
-    void start_calculation();
+    void start_calculation(e_decomposer comp);
 
     /// открыть новый файл с данными
     void open_file(const std::string &filename);
@@ -93,4 +98,23 @@ public:
     float_trace current_trace() {
         return m_current_trace;
     }
+
+    void set_red(int red) {
+        m_arg.red = red;
+    }
+    void set_green(int green) {
+        m_arg.green = green;
+    }
+    void set_blue(int blue) {
+        m_arg.blue = blue;
+    }
+    void set_amp(float amp) {
+        m_arg.amp = amp;
+    }
+    void set_time(float time) {
+        m_arg.time = time;
+    }
+
+    static void *emd_routine(void *_unused);
+    static void *mp_routine(void *_unused);
 };

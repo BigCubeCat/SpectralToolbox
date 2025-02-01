@@ -5,7 +5,6 @@
 
 #include "../routine.hpp"
 #include "resultdata.hpp"
-#include "tracechoose.hpp"
 #include "tracedata.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -33,7 +32,7 @@ private:
     resultdata m_result;
     trace_choose m_choose;
 
-    routine_arg *m_arg;
+    thread_arg *m_arg;
 
     std::thread m_thread;
 
@@ -47,7 +46,7 @@ public slots:
     void open_result_file();
 
     void run_emd();
-
+    void run_mp();
 
     void refresh(bool update_settings);
 

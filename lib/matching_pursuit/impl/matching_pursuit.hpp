@@ -6,6 +6,8 @@
 
 #include "../include/matching_pursuit.h"
 
+const int COUNT_ITERATIONS = 20;
+
 template <typename T>
 matching_pursuit<T>::matrix matching_pursuit<T>::calc_correlate_matrix(
     matching_pursuit<T>::trace &m_trace, matching_pursuit<T>::matrix &dict
@@ -70,15 +72,14 @@ matching_pursuit<T>::get_dict(int wavelet_length, T step_time_s) {
         for (int j = 0; j < wavelet_length; ++j) {
             float t = step_time_s * (j - wavelet_length / 2);
             dict(i, j) =
-                (1.0 - 2.0 * M_PI * M_PI * static_cast<float>(i * i * t * t))
-                * std::exp(-M_PI * M_PI * static_cast<float>(i * i * t * t));
+                (1.0 - 2.0 * M_PI * M_PI * static_cast<T>(i * i * t * t))
+                * std::exp(-M_PI * M_PI * static_cast<T>(i * i * t * t));
         }
         dict.row(i) /= dict.row(i).norm();
     }
     return dict;
 }
 
-const int COUNT_ITERATIONS = 10;
 
 template <typename T>
 std::vector<Eigen::Vector<T, Eigen::Dynamic>>

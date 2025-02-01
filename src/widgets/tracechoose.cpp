@@ -166,10 +166,12 @@ void trace_choose::refresh() {
 
 void trace_choose::set_step_time(float step) {
     m_step_time_s = step;
+    datamodel::instance()->set_time(m_step_time_s);
 }
 
 void trace_choose::set_amp(float amp) {
     m_max_amplitude = amp;
+    datamodel::instance()->set_amp(m_max_amplitude);
 }
 
 void trace_choose::render() {

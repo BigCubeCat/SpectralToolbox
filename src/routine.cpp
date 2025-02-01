@@ -3,7 +3,7 @@
 #include "datamodel.hpp"
 
 void *routine(void *arg) {
-    auto *argument = static_cast<routine_arg *>(arg);
+    auto *argument = static_cast<thread_arg *>(arg);
     auto *model    = datamodel::instance();
 
     while (argument->running) {

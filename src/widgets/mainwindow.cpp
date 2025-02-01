@@ -10,7 +10,7 @@
 
 
 main_window::main_window(QWidget *parent)
-    : QMainWindow(parent), m_ui(new Ui::MainWindow), m_arg(new routine_arg) {
+    : QMainWindow(parent), m_ui(new Ui::MainWindow), m_arg(new thread_arg) {
     m_ui->setupUi(this);
     this->setWindowTitle("Spectral Toolbox");
 
@@ -60,6 +60,7 @@ main_window::main_window(QWidget *parent)
     connect(m_ui->dirBtn, &QPushButton::clicked, this, &main_window::dir_name);
 
     connect(m_ui->runEMD, &QPushButton::clicked, this, &main_window::run_emd);
+    connect(m_ui->runMP, &QPushButton::clicked, this, &main_window::run_mp);
 
     connect(
         m_ui->redSpinBox, &QSpinBox::valueChanged, this, &main_window::set_red
@@ -208,7 +209,11 @@ void main_window::open_result_file() {
 }
 
 void main_window::run_emd() {
-    datamodel::instance()->start_calculation();
+    datamodel::instance()->start_calculation(EMD);
+}
+
+void main_window::run_mp() {
+    datamodel::instance()->start_calculation(MP);
 }
 
 void main_window::set_red(int red) {
@@ -216,6 +221,7 @@ void main_window::set_red(int red) {
     if (m_ui->redSpinBox->value() != red) {
         m_ui->redSpinBox->setValue(red);
     }
+    datamodel::instance()->set_red(red);
 }
 
 void main_window::set_green(int green) {
@@ -223,6 +229,7 @@ void main_window::set_green(int green) {
     if (m_ui->greenSpinBox->value() != green) {
         m_ui->greenSpinBox->setValue(green);
     }
+    datamodel::instance()->set_green(green);
 }
 
 void main_window::set_blue(int blue) {
@@ -230,6 +237,7 @@ void main_window::set_blue(int blue) {
     if (m_ui->blueSpinBox->value() != blue) {
         m_ui->blueSpinBox->setValue(blue);
     }
+    datamodel::instance()->set_blue(blue);
 }
 
 main_window::~main_window() {

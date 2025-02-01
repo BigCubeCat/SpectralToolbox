@@ -5,37 +5,10 @@
 #include <spdlog/spdlog.h>
 
 #include "em_decomposer.hpp"
+#include "mp_decomposer.hpp"
+#include "routine_arg.hpp"
 #include "segyreader.hpp"
 
-
-void *decomposer_routine(void *_unused) {
-    auto *model = datamodel::instance();
-    model->calculation_in_process.store(true);
-    model->calculation_is_done.store(false);
-    em_decomposer decomposer(5, 3, 0);
-    std::string input  = model->get_string("in");
-    std::string output = model->get_string("out");
-
-    auto sub_start       = input.rfind('/') + 1;
-    auto sub_end         = input.rfind('.');
-    auto output_filename = input.substr(sub_start, sub_end - sub_start);
-
-    std::string red_file   = output + "/" + output_filename + "_r.sgy";
-    std::string green_file = output + "/" + output_filename + "_g.sgy";
-    std::string blue_file  = output + "/" + output_filename + "_b.sgy";
-
-    decomposer.setup(red_file, green_file, blue_file);
-
-    decomposer.decompose(input, output, 100, 50, 10);
-
-    model->open_result(red_file, green_file, blue_file);
-    model->calculation_in_process.store(false);
-    model->calculation_is_done.store(true);
-
-    spdlog::info("routine end");
-
-    return nullptr;
-}
 
 void datamodel::open_file(const std::string &filename) {
     m_config.set_string("in", filename);
@@ -80,7 +53,64 @@ void datamodel::unlock_reader() {
     m_reader_mutex.unlock();
 }
 
-void datamodel::start_calculation() {
-    std::thread t(decomposer_routine, nullptr);
-    t.detach();
+void datamodel::start_calculation(e_decomposer comp) {
+    auto *model = datamodel::instance();
+
+    m_arg.input_file = model->get_string("in");
+    m_arg.output_dir = model->get_string("out");
+
+    auto sub_start = m_arg.input_file.rfind('/') + 1;
+    auto sub_end   = m_arg.input_file.rfind('.');
+    auto output_filename =
+        m_arg.input_file.substr(sub_start, sub_end - sub_start);
+
+    m_arg.red_file   = m_arg.output_dir + "/" + output_filename + "_r.sgy";
+    m_arg.green_file = m_arg.output_dir + "/" + output_filename + "_g.sgy";
+    m_arg.blue_file  = m_arg.output_dir + "/" + output_filename + "_b.sgy";
+
+    m_arg.red   = 0;
+    m_arg.green = 0;
+    m_arg.blue  = 0;
+
+    if (comp == EMD) {
+        std::thread t(datamodel::emd_routine, &m_arg);
+        t.detach();
+    }
+    else if (comp == MP) {
+        std::thread t(datamodel::mp_routine, &m_arg);
+        t.detach();
+    }
+}
+
+void *datamodel::emd_routine(void *_unused) {
+    auto *arg   = static_cast<routine_arg *>(_unused);
+    auto *model = datamodel::instance();
+    model->calculation_in_process.store(true);
+    model->calculation_is_done.store(false);
+    em_decomposer decomposer(5, 3, 0);
+    decomposer.setup(arg->red_file, arg->green_file, arg->blue_file);
+    decomposer.decompose(
+        arg->input_file, arg->output_dir, arg->blue, arg->green, arg->red
+    );
+    model->open_result(arg->red_file, arg->green_file, arg->blue_file);
+    model->calculation_in_process.store(false);
+    model->calculation_is_done.store(true);
+    spdlog::info("routine end");
+    return nullptr;
+}
+
+void *datamodel::mp_routine(void *_unused) {
+    auto *arg   = static_cast<routine_arg *>(_unused);
+    auto *model = datamodel::instance();
+    model->calculation_in_process.store(true);
+    model->calculation_is_done.store(false);
+    mp_decomposer decomposer(arg->time, arg->amp);
+    decomposer.decompose(
+        arg->input_file, arg->output_dir, arg->blue, arg->green, arg->red
+    );
+    model->open_result(arg->red_file, arg->green_file, arg->blue_file);
+    model->calculation_in_process.store(false);
+    model->calculation_is_done.store(true);
+    spdlog::info("routine end");
+    return nullptr;
 }
