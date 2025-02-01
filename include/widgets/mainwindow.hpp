@@ -5,6 +5,7 @@
 
 #include "../routine.hpp"
 #include "resultdata.hpp"
+#include "tracechoose.hpp"
 #include "tracedata.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -30,6 +31,7 @@ private:
 
     tracedata m_data;
     resultdata m_result;
+    trace_choose m_choose;
 
     routine_arg *m_arg;
 
@@ -54,5 +56,11 @@ public slots:
     void set_crossline(int crossline);
 
     void dir_name();
+
+    void set_red(int red);
+
+    void set_green(int green);
+
+    void set_blue(int blue);
 };
 #endif    // MAINWINDOW_H

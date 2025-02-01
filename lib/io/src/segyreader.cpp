@@ -154,7 +154,9 @@ std::vector<int> segy_reader::get_crossline_layer(int32_t crossline) {
     if (result != m_layers.end()) {
         return result->second;
     }
-    throw std::runtime_error("not found " + std::to_string(crossline));
+    throw std::runtime_error(
+        "crossline layer not found " + std::to_string(crossline)
+    );
 }
 
 segy_reader::~segy_reader() {

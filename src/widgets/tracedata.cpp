@@ -34,6 +34,8 @@ void tracedata::resizeEvent(QResizeEvent *event) {
 void tracedata::update_image() {
     m_need_update.store(false);
 
+    m_no_data_label->setText("");
+
     auto *data   = datamodel::instance();
     auto *reader = data->reader();
     if (!reader) {

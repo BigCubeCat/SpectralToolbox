@@ -23,23 +23,25 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 qt_standard_project_setup()
 
 qt_add_executable(${PROJECT_NAME}
-        WIN32 MACOSX_BUNDLE
-        src/main.cpp
-        src/widgets/mainwindow.cpp
-        src/widgets/procedure_config_widget.cpp
-        include/widgets/mainwindow.hpp
-        include/widgets/procedure_config_widget.hpp
-        src/widgets/mainwindow.ui
-        src/widgets/tracedata.cpp
-        include/widgets/tracedata.hpp
 
-        include/widgets/resultdata.hpp
-        src/widgets/resultdata.cpp
+    WIN32 MACOSX_BUNDLE
+    src/main.cpp
+    src/widgets/mainwindow.cpp
+    src/widgets/procedure_config_widget.cpp
+    include/widgets/mainwindow.hpp
+    include/widgets/procedure_config_widget.hpp
+    src/widgets/mainwindow.ui
+    src/widgets/tracedata.cpp
+    include/widgets/tracedata.hpp
 
-        include/routine.hpp
-        src/routine.cpp
-        lib/model/include/idle_decomposer.hpp
-        lib/model/src/idle_decomposer.cpp
+    include/widgets/resultdata.hpp
+    src/widgets/resultdata.cpp
+
+    include/routine.hpp
+    src/routine.cpp
+
+    include/widgets/tracechoose.hpp
+    src/widgets/tracechoose.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
