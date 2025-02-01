@@ -36,6 +36,7 @@ void resultdata::update_image() {
         return;
     }
 
+    m_no_data_label->setText("");
     auto *data         = datamodel::instance();
     auto *red_reader   = data->red_reader();
     auto *green_reader = data->green_reader();

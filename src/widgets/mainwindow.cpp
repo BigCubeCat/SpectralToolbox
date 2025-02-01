@@ -22,6 +22,7 @@ main_window::main_window(QWidget *parent)
     m_ui->renderLayout1->addWidget(&m_result);
 
     m_ui->tab->setLayout(m_ui->tab1Layout);
+    m_ui->tab_2->setLayout(m_ui->mpLayout);
 
     m_ui->tabInput->setLayout(m_ui->renderLayout);
     m_ui->tabOutput->setLayout(m_ui->renderLayout1);
@@ -56,6 +57,19 @@ main_window::main_window(QWidget *parent)
     connect(m_ui->dirBtn, &QPushButton::clicked, this, &main_window::dir_name);
 
     connect(m_ui->runEMD, &QPushButton::clicked, this, &main_window::run_emd);
+
+    connect(
+        m_ui->redSpinBox, &QSpinBox::valueChanged, this, &main_window::set_red
+    );
+    connect(
+        m_ui->greenSpinBox,
+        &QSpinBox::valueChanged,
+        this,
+        &main_window::set_green
+    );
+    connect(
+        m_ui->blueSpinBox, &QSpinBox::valueChanged, this, &main_window::set_blue
+    );
 
     m_thread = std::thread(routine, m_arg);
 }
@@ -156,6 +170,12 @@ void main_window::open_result_file() {
 void main_window::run_emd() {
     datamodel::instance()->start_calculation();
 }
+
+void main_window::set_red(int red) { }
+
+void main_window::set_green(int green) { }
+
+void main_window::set_blue(int blue) { }
 
 main_window::~main_window() {
     m_arg->running = false;

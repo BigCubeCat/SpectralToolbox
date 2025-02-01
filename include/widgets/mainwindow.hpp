@@ -54,5 +54,11 @@ public slots:
     void set_crossline(int crossline);
 
     void dir_name();
+
+    void set_red(int red);
+
+    void set_green(int green);
+
+    void set_blue(int blue);
 };
 #endif    // MAINWINDOW_H
