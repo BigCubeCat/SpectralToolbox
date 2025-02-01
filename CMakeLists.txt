@@ -38,6 +38,9 @@ qt_add_executable(${PROJECT_NAME}
 
     include/routine.hpp
     src/routine.cpp
+
+    include/widgets/tracechoose.hpp
+    src/widgets/tracechoose.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

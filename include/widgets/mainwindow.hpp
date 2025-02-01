@@ -5,6 +5,7 @@
 
 #include "../routine.hpp"
 #include "resultdata.hpp"
+#include "tracechoose.hpp"
 #include "tracedata.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -30,6 +31,7 @@ private:
 
     tracedata m_data;
     resultdata m_result;
+    trace_choose m_choose;
 
     routine_arg *m_arg;
 

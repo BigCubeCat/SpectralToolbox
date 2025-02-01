@@ -14,6 +14,8 @@ main_window::main_window(QWidget *parent)
     m_ui->setupUi(this);
     this->setWindowTitle("Spectral Toolbox");
 
+    m_ui->prevLayout->addWidget(&m_choose);
+
     m_arg->running = true;
     m_arg->td      = &m_data;
     m_arg->rd      = &m_result;
@@ -71,6 +73,19 @@ main_window::main_window(QWidget *parent)
         m_ui->blueSpinBox, &QSpinBox::valueChanged, this, &main_window::set_blue
     );
 
+    connect(
+        m_ui->stepTimeS,
+        &QDoubleSpinBox::valueChanged,
+        &m_choose,
+        &trace_choose::set_step_time
+    );
+    connect(
+        m_ui->maxAmplitude,
+        &QDoubleSpinBox::valueChanged,
+        &m_choose,
+        &trace_choose::set_amp
+    );
+
     m_thread = std::thread(routine, m_arg);
 }
 
@@ -113,6 +128,7 @@ void main_window::refresh(bool update_settings) {
 void main_window::set_traceno(int traceno) {
     m_current_trace = traceno;
     m_data.set_traceid(traceno);
+    m_choose.set_traceno(traceno);
     refresh(false);
 }
 
