@@ -90,6 +90,13 @@ main_window::main_window(QWidget *parent)
     );
 
     connect(
+        m_ui->previewButton,
+        &QPushButton::clicked,
+        &this->m_choose,
+        &trace_choose::refresh
+    );
+
+    connect(
         m_ui->stepTimeS,
         &QDoubleSpinBox::valueChanged,
         &m_choose,

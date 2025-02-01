@@ -1,12 +1,11 @@
 #pragma once
 
 #include <QWidget>
+#include <thread>
 
 #include <qwidget.h>
 
 #include "matching_pursuit.h"
-#include "trace.hpp"
-
 
 /*!
  * виджет для выбора частоты
@@ -16,7 +15,6 @@ class trace_choose : public QWidget {
 public:
     trace_choose();
 
-    void refresh();
 
     void set_need_update(bool need) {
         m_need_update.store(need);
@@ -25,8 +23,11 @@ public:
         return m_need_update.load();
     }
 
+    void render();
+
 private:
     std::atomic<bool> m_need_update;
+    std::thread m_refresh_thread;
     QImage m_image;
     int m_red   = -1;
     int m_green = -1;
@@ -36,8 +37,8 @@ private:
 
     int m_traceno = 0;
 
-    float m_step_time_s;
-    float m_max_amplitude;
+    float m_step_time_s   = 0.1f;
+    float m_max_amplitude = 0.1f;
 
     matching_pursuit<float> m_mp;
     std::mutex m_data_mutex;
@@ -49,7 +50,7 @@ private:
 
     void resizeEvent(QResizeEvent *event) override;
 
-    void render();
+    static void *routine(void *arg);
 
 public slots:
     void reset();
@@ -62,6 +63,8 @@ public slots:
 
     void set_step_time(float step);
     void set_amp(float amp);
+
+    void refresh();
 
 signals:
     void red_changed(int);

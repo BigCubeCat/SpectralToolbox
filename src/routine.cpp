@@ -13,9 +13,6 @@ void *routine(void *arg) {
         if (argument->rd->need_update() || model->calculation_is_done.load()) {
             argument->rd->update_image();
         }
-        if (argument->tc->need_update()) {
-            argument->tc->refresh();
-        }
     }
     return nullptr;
 }

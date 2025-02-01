@@ -114,9 +114,9 @@ void resultdata::render_image() {
 }
 
 QColor resultdata::pixel(rgb_t value) {
-    return { static_cast<int>(qBound(0.0f, value.r, 1.0f) * 255),
-             static_cast<int>(qBound(0.0f, value.g, 1.0f) * 255),
-             static_cast<int>(qBound(0.0f, value.b, 1.0f) * 255) };
+    return { static_cast<int>(qBound(0.0f, 1 - value.r, 1.0f) * 255),
+             static_cast<int>(qBound(0.0f, 1 - value.g, 1.0f) * 255),
+             static_cast<int>(qBound(0.0f, 1 - value.b, 1.0f) * 255) };
 };
 
 void resultdata::set_crossline(int crossline) {
