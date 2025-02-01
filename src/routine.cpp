@@ -10,8 +10,11 @@ void *routine(void *arg) {
         if (argument->td->need_update()) {
             argument->td->update_image();
         }
-        if (model->calculation_is_done.load()) {
+        if (argument->rd->need_update() || model->calculation_is_done.load()) {
             argument->rd->update_image();
+        }
+        if (argument->tc->need_update()) {
+            argument->tc->refresh();
         }
     }
     return nullptr;

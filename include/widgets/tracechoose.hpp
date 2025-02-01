@@ -5,6 +5,7 @@
 #include <qwidget.h>
 
 #include "matching_pursuit.h"
+#include "trace.hpp"
 
 
 /*!
@@ -15,11 +16,21 @@ class trace_choose : public QWidget {
 public:
     trace_choose();
 
+    void refresh();
+
+    void set_need_update(bool need) {
+        m_need_update.store(need);
+    }
+    bool need_update() {
+        return m_need_update.load();
+    }
+
 private:
+    std::atomic<bool> m_need_update;
     QImage m_image;
-    int m_red   = 0;
-    int m_green = 0;
-    int m_blue  = 0;
+    int m_red   = -1;
+    int m_green = -1;
+    int m_blue  = -1;
 
     int m_counter = 0;
 
@@ -29,6 +40,8 @@ private:
     float m_max_amplitude;
 
     matching_pursuit<float> m_mp;
+    std::mutex m_data_mutex;
+    std::vector<std::vector<float>> m_data;
 
     void mousePressEvent(QMouseEvent *event) override;
 
@@ -36,7 +49,7 @@ private:
 
     void resizeEvent(QResizeEvent *event) override;
 
-    void refresh();
+    void render();
 
 public slots:
     void reset();
@@ -51,7 +64,7 @@ public slots:
     void set_amp(float amp);
 
 signals:
-    void red_changed();
-    void green_changed();
-    void blue_changed();
+    void red_changed(int);
+    void green_changed(int);
+    void blue_changed(int);
 };

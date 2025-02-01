@@ -119,9 +119,16 @@
          <layout class="QHBoxLayout" name="prevLayout"/>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="resetButton">
           <property name="text">
            <string>Сбросить</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="previewButton">
+          <property name="text">
+           <string>PushButton</string>
           </property>
          </widget>
         </item>
