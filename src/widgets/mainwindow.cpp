@@ -14,7 +14,9 @@ main_window::main_window(QWidget *parent)
 
     m_ui->renderLayout->addWidget(&m_data);
     m_ui->tab->setLayout(m_ui->tab1Layout);
-    // m_ui->scrollArea->setWidget(m_ui->dirLabel);
+
+    m_ui->tabInput->setLayout(m_ui->renderLayout);
+    m_ui->tabOutput->setLayout(m_ui->renderLayout1);
 
     connect(
         m_ui->actionOpen_SEG_Y_file,
