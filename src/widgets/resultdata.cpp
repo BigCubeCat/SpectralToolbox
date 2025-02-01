@@ -67,9 +67,8 @@ void resultdata::update_image() {
 
     const int cols = static_cast<int>(red_reader->trace(red_traces[0]).size());
 
-    m_max_red   = 0;
-    m_max_green = 0;
-    m_max_blue  = 0;
+    m_max_value = 0;
+    m_min_value = INT_MAX;
 
     m_image_data.resize(size);
     for (int i = 0; i < size; ++i) {
@@ -82,9 +81,10 @@ void resultdata::update_image() {
         for (int j = 0; j < cols - 1; ++j) {
             auto x = (red_reader->trace_inline(i) - red_reader->min_inline());
             row[j] = { .r = red_tr[j], .g = green_tr[j], .b = blue_tr[j] };
-            m_max_red   = std::max(m_max_red, red_tr[j]);
-            m_max_green = std::max(m_max_green, green_tr[j]);
-            m_max_blue  = std::max(m_max_blue, blue_tr[j]);
+            m_max_value =
+                std::max({ m_max_value, red_tr[j], green_tr[j], blue_tr[j] });
+            m_min_value =
+                std::min({ m_min_value, red_tr[j], green_tr[j], blue_tr[j] });
         }
         m_image_data[i] = row;
     }
@@ -114,14 +114,27 @@ void resultdata::render_image() {
 }
 
 QColor resultdata::pixel(rgb_t value) {
-    return { static_cast<int>(qBound(0.0f, 1 - value.r, 1.0f) * 255),
-             static_cast<int>(qBound(0.0f, 1 - value.g, 1.0f) * 255),
-             static_cast<int>(qBound(0.0f, 1 - value.b, 1.0f) * 255) };
+    return { normalize_pixel(value.r),
+             normalize_pixel(value.g),
+             normalize_pixel(value.b) };
 };
 
 void resultdata::set_crossline(int crossline) {
     m_crossline = crossline;
     update_image();
+}
+
+
+int resultdata::normalize_pixel(float value) {
+    return std::min(
+        std::max(
+            static_cast<int>(
+                (255 * (value - m_min_value)) / (m_max_value - m_min_value)
+            ),
+            0
+        ),
+        255
+    );
 }
 
 resultdata::~resultdata() { }
