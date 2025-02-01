@@ -1,7 +1,5 @@
 #pragma once
 #include <cmath>
-#include <fstream>
-#include <iostream>
 #include <vector>
 
 #include "../include/matching_pursuit.h"

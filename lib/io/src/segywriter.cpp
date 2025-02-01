@@ -1,6 +1,5 @@
 #include "segywriter.hpp"
 
-#include <iostream>
 #include <stdexcept>
 
 #include <segyio/segy.h>
@@ -11,6 +10,7 @@ segy_writer::segy_writer(std::string filename)
       m_segy_file_ptr(segy_open(m_filename.c_str(), "w")) { }
 
 void segy_writer::write_binheader(char *binheader) {
+    spdlog::debug("is file_ptr null? {}", m_segy_file_ptr == nullptr);
     auto status = segy_write_binheader(m_segy_file_ptr, binheader);
     if (status != 0) {
         spdlog::critical("write_binheader: status={}", status);

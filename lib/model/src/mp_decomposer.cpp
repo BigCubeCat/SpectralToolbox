@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+#include <spdlog/spdlog.h>
+
 #include "segyreader.hpp"
 #include "segywriter.hpp"
 
@@ -41,11 +43,12 @@ void mp_decomposer::decompose(
     std::string red_file   = output_dir + "/" + output_filename + "_r.sgy";
     std::string green_file = output_dir + "/" + output_filename + "_g.sgy";
     std::string blue_file  = output_dir + "/" + output_filename + "_b.sgy";
-    segy_writer writer_red { red_file };
+    spdlog::debug("red_file={}", red_file);
+    segy_writer writer_red(red_file);
     writer_red.write_binheader(binheader);
-    segy_writer writer_green { green_file };
+    segy_writer writer_green(green_file);
     writer_green.write_binheader(binheader);
-    segy_writer writer_blue { blue_file };
+    segy_writer writer_blue(blue_file);
     writer_blue.write_binheader(binheader);
 
     // берем границы кросслайна для цикла
@@ -53,6 +56,7 @@ void mp_decomposer::decompose(
     int max_crossline = reader.max_crossline();
 
     std::vector<segy_reader> readers;
+    readers.reserve(cnt_threads);
     for (int i = 0; i < cnt_threads; ++i) {
         readers.emplace_back(input_file);
     }
@@ -62,14 +66,15 @@ void mp_decomposer::decompose(
         // берем индексы разреза
         std::vector<int> idxs = reader.get_crossline_layer(i);
 
-        std::cout << i << " " << idxs.size() << std::endl;
+        spdlog::debug("{} {}", i, idxs.size());
 
         std::vector<float_trace> red_line_traces { idxs.size() };
         std::vector<float_trace> blue_line_traces { idxs.size() };
         std::vector<float_trace> green_line_traces { idxs.size() };
         std::vector<std::vector<char>> line_trace_headers { idxs.size() };
         // для каждого разреза делаем декомпозицию
-#pragma omp parallel for schedule(dynamic) proc_bind(spread) num_threads(cnt_threads)
+#pragma omp parallel for schedule(dynamic) proc_bind(spread)                   \
+    num_threads(cnt_threads)
         for (int j = 0; j < idxs.size(); ++j) {
             line_trace_headers[j] =
                 readers[omp_get_thread_num()].traceheader(idxs[j]);
@@ -81,6 +86,7 @@ void mp_decomposer::decompose(
             green_line_traces[j] = results[green];
             blue_line_traces[j]  = results[blue];
         }
+        spdlog::debug("after first for");
 
         // сохраняем в файлы
 #pragma omp parallel proc_bind(spread) num_threads(3)

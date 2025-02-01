@@ -187,25 +187,27 @@ void main_window::open_result_file() {
     auto red_filename = QFileDialog::getOpenFileName(
         this, "Выберите красный файл", "", "SEG-Y (*.sgy *.segy)"
     );
+    if (red_filename.isEmpty()) {
+        return;
+    }
     auto green_filename = QFileDialog::getOpenFileName(
         this, "Выберите зеленый файл", "", "SEG-Y (*.sgy *.segy)"
     );
+    if (green_filename.isEmpty()) {
+        return;
+    }
     auto blue_filename = QFileDialog::getOpenFileName(
         this, "Выберите синий файл", "", "SEG-Y (*.sgy *.segy)"
     );
-
-    if (!red_filename.isEmpty() && !green_filename.isEmpty()
-        && !blue_filename.isEmpty()) {
-        datamodel::instance()->open_result(
-            red_filename.toStdString(),
-            green_filename.toStdString(),
-            blue_filename.toStdString()
-        );
-        on_open_file();
+    if (blue_filename.isEmpty()) {
+        return;
     }
-    else {
-        spdlog::error("filename is isEmpty");
-    }
+    datamodel::instance()->open_result(
+        red_filename.toStdString(),
+        green_filename.toStdString(),
+        blue_filename.toStdString()
+    );
+    on_open_file();
 }
 
 void main_window::run_emd() {

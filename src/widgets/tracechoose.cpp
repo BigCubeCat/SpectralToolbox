@@ -194,10 +194,8 @@ void trace_choose::render() {
                 );
             }
             else {
-                auto point = m_data[i][j] * 2;
-                if (point > 0) {
-                    spdlog::info("point={}", point);
-                }
+                auto point = m_data[i][j];
+                if (point > 0) { }
                 color = interpolate(qBound(0.0f, point, 1.0f));
             }
             for (int k = 0; k < SCALE; ++k) {

@@ -29,12 +29,10 @@ reader_iface *datamodel::reader() {
 void datamodel::open_result(
     const std::string &red, const std::string &green, const std::string &blue
 ) {
-    m_reader_mutex.lock();
     m_red_reader   = std::make_shared<segy_reader>(red);
     m_green_reader = std::make_shared<segy_reader>(green);
     m_blue_reader  = std::make_shared<segy_reader>(blue);
     calculation_is_done.store(true);
-    m_reader_mutex.unlock();
 }
 
 reader_iface *datamodel::red_reader() {
@@ -104,11 +102,15 @@ void *datamodel::mp_routine(void *_unused) {
     auto *model = datamodel::instance();
     model->calculation_in_process.store(true);
     model->calculation_is_done.store(false);
+    spdlog::debug("statring mp rountine");
     mp_decomposer decomposer(arg->time, arg->amp);
+    spdlog::debug("decomposer created");
     decomposer.decompose(
         arg->input_file, arg->output_dir, arg->blue, arg->green, arg->red
     );
+    spdlog::debug("decompose finished");
     model->open_result(arg->red_file, arg->green_file, arg->blue_file);
+    spdlog::debug("result opening");
     model->calculation_in_process.store(false);
     model->calculation_is_done.store(true);
     spdlog::info("routine end");
