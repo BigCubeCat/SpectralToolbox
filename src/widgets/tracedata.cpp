@@ -63,6 +63,7 @@ void tracedata::update_image() {
     const int cols = static_cast<int>(reader->trace(traces[0]).size());
 
     m_max_value = 0;
+    m_min_value = INT_MAX;
     m_image_data.resize(size);
     for (int i = 0; i < size; ++i) {
         int traceno = traces[i];
@@ -75,6 +76,7 @@ void tracedata::update_image() {
             auto x = (reader->trace_inline(traceno) - reader->min_inline());
             row[j] = { tr[j], i };
             m_max_value = std::max(m_max_value, tr[j]);
+            m_min_value = std::min(m_min_value, tr[j]);
         }
         m_image_data[i] = row;
     }
@@ -106,7 +108,10 @@ void tracedata::render_image() {
 }
 
 QColor tracedata::pixel(float value) const {
-    auto v = static_cast<int>(qBound(0.0f, value / m_max_value, 1.0f) * 255);
+    auto v = static_cast<int>(
+        (255 * (value - m_min_value)) / (m_max_value - m_min_value)
+    );
+    v = std::min(std::max(v, 0), 255);
     return { v, v, v };
 }
 
