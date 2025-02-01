@@ -153,6 +153,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen_SEG_Y_file"/>
+    <addaction name="actionOpen_Result"/>
     <addaction name="separator"/>
     <addaction name="actionSave_as"/>
    </widget>
@@ -256,6 +257,11 @@
   <action name="actionSave_as">
    <property name="text">
     <string>Save as...</string>
+   </property>
+  </action>
+  <action name="actionOpen_Result">
+   <property name="text">
+    <string>Open Result</string>
    </property>
   </action>
  </widget>

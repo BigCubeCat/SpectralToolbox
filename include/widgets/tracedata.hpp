@@ -19,10 +19,8 @@ private:
 
 
     [[nodiscard]] QColor pixel(float value) const;
-    static void *routine(void *arg);
 
     void render_image();
-    void update_image();
 
     std::atomic<bool> m_need_update;
 
@@ -31,11 +29,11 @@ public:
 
     bool need_update();
 
+    void update_image();
+
     void set_need_update(bool upd);
 
     ~tracedata() override;
-signals:
-    void done();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

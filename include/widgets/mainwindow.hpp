@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+#include "../routine.hpp"
 #include "resultdata.hpp"
 #include "tracedata.hpp"
 
@@ -30,12 +31,18 @@ private:
     tracedata m_data;
     resultdata m_result;
 
+    routine_arg *m_arg;
+
+    std::thread m_thread;
+
     std::string m_dir_path;
 
     void on_open_file();
 
 public slots:
     void open_segy_file();
+
+    void open_result_file();
 
     void run_emd();
 
@@ -47,7 +54,5 @@ public slots:
     void set_crossline(int crossline);
 
     void dir_name();
-
-    void done();
 };
 #endif    // MAINWINDOW_H

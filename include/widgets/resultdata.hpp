@@ -25,16 +25,12 @@ private:
     static void *routine(void *arg);
 
     void render_image();
-    void update_image();
 
-    std::atomic<bool> m_need_update;
 
 public:
     resultdata(QWidget *parent = nullptr);
 
-    bool need_update();
-
-    void set_need_update(bool upd);
+    void update_image();
 
     ~resultdata() override;
 

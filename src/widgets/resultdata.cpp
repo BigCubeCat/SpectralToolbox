@@ -89,6 +89,7 @@ void resultdata::update_image() {
     }
     data->unlock_reader();
     render_image();
+    datamodel::instance()->calculation_is_done.store(true);
 }
 
 void resultdata::render_image() {
@@ -119,14 +120,6 @@ QColor resultdata::pixel(rgb_t value) {
 
 void resultdata::set_crossline(int crossline) {
     m_crossline = crossline;
-    update_image();
-}
-
-bool resultdata::need_update() {
-    return m_need_update.load();
-}
-
-void resultdata::set_need_update(bool upd) {
     update_image();
 }
 

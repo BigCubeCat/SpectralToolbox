@@ -60,6 +60,7 @@ void datamodel::open_result(
     m_red_reader   = std::make_shared<segy_reader>(red);
     m_green_reader = std::make_shared<segy_reader>(green);
     m_blue_reader  = std::make_shared<segy_reader>(blue);
+    calculation_is_done.store(true);
     m_reader_mutex.unlock();
 }
 
